@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 19:48:31 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/06 14:40:32 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/06 15:25:47 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ int	parse_rdir_type(char *str, int *i, t_cmd *command)
 	return (0);
 }
 
-int parse_files(char *str, int *i, t_cmd *command)
+int	parse_files(char *str, int *i, t_cmd *command)
 {
 	int	start;
 	int	end;
@@ -396,7 +396,7 @@ int	redirections(char **str, t_cmd *command)
 	return (0);
 }
 
-int parse_args(char *str, int *i, t_cmd *command)
+int	parse_args(char *str, int *i, t_cmd *command)
 {
 	int	start;
 	int	end;
@@ -417,7 +417,7 @@ int parse_args(char *str, int *i, t_cmd *command)
 	return (0);
 }
 
-int new_argument(char **str, int start, t_cmd *command)
+int	new_argument(char **str, int start, t_cmd *command)
 {
 	int	end;
 
@@ -702,15 +702,18 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
+	commands = NULL;
 	create_envs(envp, &envs);
 	//print_env(envs);
-	str = readline("% ");
-	commands = NULL;
-	create_commands(str, &commands, envs);
-	print_com(commands);
-	free_commands(&commands);
+	while (1)
+	{
+		str = readline("% ");
+		create_commands(str, &commands, envs);
+		print_com(commands);
+		free_commands(&commands);
+		free(str);
+	}
 	free_envs(&envs);
-	free(str);
 	return (0);
 }
 
