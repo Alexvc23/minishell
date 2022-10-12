@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 11:19:09 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 12:33:13 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ typedef struct s_cmd
 	int				n_rdirs;
 	char			*in;
 	char			*out;
-	int				heredoc;
-	int				append;
 	struct s_cmd	*next;
 }	t_cmd;
 

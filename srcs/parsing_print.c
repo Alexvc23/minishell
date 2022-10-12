@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:35:17 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/09 06:35:20 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 13:14:52 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	print_arguments(char **args, int n)
 
 	printf("	%d Arguments : \n", n);
 	i = 0;
-	while (i < n)
+	while (args[i])
 	{
 		printf("		|%s|\n", args[i]);
 		i++;

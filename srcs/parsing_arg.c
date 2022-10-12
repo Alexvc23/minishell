@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:42:21 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/11 08:43:03 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 13:46:28 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,7 @@ int	new_argument(char **str, int i, t_cmd *command)
 
 	start = start_c(*str, i);
 	if ((*str)[start] == '\0')
-	{
 		remove_char(str, i, start);
-		command->args[command->n_args] = NULL;
-	}
 	else
 	{
 		end = end_arg(*str, start);
@@ -88,6 +85,7 @@ int	create_argument(char **str, t_cmd *command)
 		if (new_argument(str, i, command))
 			return (1);
 	}
+	command->args[command->n_args] = NULL;
 	return (0);
 }
 

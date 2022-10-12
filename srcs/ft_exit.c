@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 15:25:13 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/12 10:23:06 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 12:54:46 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	ft_exit(t_cmd *cmd)
 	int	exit_status;
 
 	ft_putstr_fd("exit\n", 1);
-	//exit_status = g_vars.status;
 	if (cmd && cmd->n_args >= 2 && !str_is_valid_num(cmd->args[1]))
 	{
 		ft_putstr_fd("exit: ", 2);
@@ -54,9 +53,6 @@ int	ft_exit(t_cmd *cmd)
 		exit_status = ft_atoi(cmd->args[0]) % 256;
 	else
 		exit_status = 0;
-	//reset_terminal(g_vars);
-	if (g_vars.pids)
-		free(g_vars.pids);
 	free_commands(&g_vars.cmd);
 	free_envs(&g_vars.env);
 	exit(exit_status);

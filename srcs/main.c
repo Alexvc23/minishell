@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 19:48:31 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 10:31:19 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 12:53:01 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,30 +48,68 @@ int	ft_cmd_size(t_cmd *cmd)
 	return (count);
 }
 
-pid_t	exec_heredoc(t_cmd *cmd)
+static t_env	*ft_new_node(char *key, char *value)
 {
-	pid_t	pid;
-	int		file[2];
+	t_env	*new;
 
-	if (pipe(file) < 0)
-		return (-1);
-	pid = fork();
-	if (pid)
+	new = malloc(sizeof(t_env));
+	if (!new)
+		return (NULL);
+	new->key = key;
+	new->value = value;
+	new->next = NULL;
+	return (new);
+}
+
+static t_env	*ft_last_node(t_env *head)
+{
+	t_env	*tmp;
+
+	if (!head)
+		return (0);
+	tmp = head;
+	while (tmp->next)
+		tmp = tmp->next;
+	return (tmp);
+}
+
+static void	ft_add_node_back(t_env **head, t_env *new)
+{
+	t_env	*ptr;
+
+	ptr = *head;
+	if (!new)
+		return ;
+	if (!*head)
 	{
-		dup2(file[0], STDIN_FILENO);
-		close(file[0]);
-		close(file[1]);
+		*head = new;
+		return ;
 	}
-	else
+	ptr = ft_last_node(*head);
+	ptr->next = new;
+}
+
+void	ft_update_env(t_env **env, char *key, char *value)
+{
+	t_env	*tmp;
+
+	tmp = *env;
+	if (!env || !key || !value)
+		return ;
+	while (tmp)
 	{
-		if (!cmd->in)
-			cmd->in = ft_strdup("");
-		pid = write(file[1], cmd->in, ft_strlen(cmd->in));
-		close(file[0]);
-		close(file[1]);
-		exit(pid);
+		if (!ft_strncmp(key, tmp->key, ft_strlen(key) + 1))
+		{
+			free(tmp->value);
+			free(key);
+			tmp->value = value;
+			return ;
+		}
+		tmp = tmp->next;
 	}
-	return (pid);
+	tmp = *env;
+	ft_add_node_back(&tmp, ft_new_node(key, value));
+	return ;
 }
 
 int	ft_is_builtin(t_cmd *cmd)
@@ -127,8 +165,8 @@ char	**ft_env_to_array(t_env **env)
 {
 	char	**arr;
 	t_env	*tmp;
-	size_t	envsize;
-	size_t	i;
+	int		envsize;
+	int		i;
 
 	envsize = ft_size_list(*env);
 	arr = malloc(sizeof(char *) * (envsize + 1));
@@ -178,7 +216,6 @@ char	*ft_get_cmd(char *v_path, char *cmd)
 		if (!access(new_cmd, 0))
 		{
 			free(tmp);
-			printf("%s\n", new_cmd);
 			return (new_cmd);
 		}
 		free(tmp);
@@ -243,8 +280,10 @@ void	dup_redirec(t_cmd *cmd)
 	if (cmd->out)
 	{
 		out = open(cmd->out, O_WRONLY | O_CREAT | (
-					O_TRUNC * (cmd->append != 2)) | (
-					O_APPEND * (cmd->append == 2)), 0777);
+					O_TRUNC) | (
+					O_APPEND), 0777);
+					//O_TRUNC * (cmd->append != 2)) | (
+					//O_APPEND * (cmd->append == 2)), 0777);
 		if (out < 0)
 			exit(1);
 		dup2(out, STDOUT_FILENO);
@@ -275,6 +314,32 @@ pid_t	exec_single(t_cmd *cmd, t_env **env, int id)
 	return (pid);
 }
 
+pid_t	exec_heredoc(t_cmd *cmd)
+{
+	pid_t	pid;
+	int		file[2];
+
+	if (pipe(file) < 0)
+		return (-1);
+	pid = fork();
+	if (pid)
+	{
+		dup2(file[0], STDIN_FILENO);
+		close(file[0]);
+		close(file[1]);
+	}
+	else
+	{
+		if (!cmd->in)
+			cmd->in = ft_strdup("");
+		pid = write(file[1], cmd->in, ft_strlen(cmd->in));
+		close(file[0]);
+		close(file[1]);
+		exit(pid);
+	}
+	return (pid);
+}
+
 pid_t	exec_pipe(t_cmd *cmd, t_env **env)
 {
 	pid_t	pid;
@@ -290,13 +355,15 @@ pid_t	exec_pipe(t_cmd *cmd, t_env **env)
 		dup2(files[0], STDIN_FILENO);
 		close(files[0]);
 		close(files[1]);
-		return (pid);
 	}
-	dup2(files[1], STDOUT_FILENO);
-	close(files[0]);
-	close(files[1]);
-	dup_redirec(cmd);
-	exec_cmd(cmd, env);
+	else
+	{
+		dup2(files[1], STDOUT_FILENO);
+		close(files[0]);
+		close(files[1]);
+		dup_redirec(cmd);
+		exec_cmd(cmd, env);
+	}
 	return (pid);
 }
 
@@ -304,24 +371,25 @@ pid_t	exec_type(t_cmd *cmd, t_env **env, int id)
 {
 	int	pid;
 
-	if (cmd->heredoc)
-		pid = exec_heredoc(cmd);
+	//if (cmd->heredoc)
+	//	pid = exec_heredoc(cmd);
 	if (!cmd->next)
 	{
 		dup2(g_vars.stdout, STDOUT_FILENO);
 		pid = exec_single(cmd, env, id);
 		dup2(g_vars.stdin, STDIN_FILENO);
-		return (pid);
 	}
-	return (exec_pipe(cmd, env));
+	else
+		pid = exec_pipe(cmd, env);
+	return (pid);
 }
 
-void	exec_wait()
+void	exec_wait(t_cmd *cmd)
 {
 	int				status;
 	unsigned int	i;
 
-	if (g_vars.n_cmd > 1 || (g_vars.cmd && !ft_is_builtin(g_vars.cmd)))
+	if (g_vars.n_cmd > 1 || (cmd && !ft_is_builtin(cmd)))
 	{
 		i = -1;
 		while (++i < (unsigned int)g_vars.n_cmd)
@@ -335,30 +403,29 @@ void	exec_wait()
 		}
 	}
 	g_vars.n_cmd = 0;
-	if (g_vars.pids)
-		free(g_vars.pids);
+	free(g_vars.pids);
 }
 
 void	exec(void)
 {
 	int		i;
+	t_cmd	*cmd;
 
-	g_vars.n_cmd = ft_cmd_size(g_vars.cmd);
+	cmd = g_vars.cmd;
 	g_vars.pids = calloc(g_vars.n_cmd, sizeof(int));
 	if (!g_vars.n_cmd || !g_vars.pids)
 		return ;
 	i = 0;
 	while (i < g_vars.n_cmd)
 	{
-		g_vars.pids[i] = exec_type(g_vars.cmd, &g_vars.env, i);
-		if (g_vars.cmd->next)
-			g_vars.cmd = g_vars.cmd->next;
+		g_vars.pids[i] = exec_type(cmd, &g_vars.env, i);
+		if (cmd->next)
+			cmd = cmd->next;
 		i++;
 	}
-	exec_wait();
-	//i = ft_counter(cmd); //compte le nombre d'arguments dans la commande
-	//ft_update_env(&g_vars->env, ft_strdup("_"), ft_strdup(cmd->argv[i])); //update key "_" in env with the last arg of the command ?
-
+	ft_update_env(&g_vars.env, ft_strdup("_"),
+		ft_strdup(g_vars.cmd->args[g_vars.cmd->n_args - 1]));
+	exec_wait(g_vars.cmd);
 	dup2(g_vars.stdin, STDIN_FILENO);
 	dup2(g_vars.stdout, STDOUT_FILENO);
 	dup2(g_vars.stderr, STDERR_FILENO);
@@ -393,6 +460,7 @@ int	ft_prompt(void)
 		ft_exit(NULL);
 	if (create_commands(str))
 		return (1);
+	g_vars.n_cmd = ft_cmd_size(g_vars.cmd);
 	print_com(g_vars.cmd);
 	add_history(str);
 	exec();
