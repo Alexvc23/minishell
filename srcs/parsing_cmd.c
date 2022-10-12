@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:38:30 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/11 08:29:06 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 14:30:38 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,19 @@ int	create_commands(char *str)
 {
 	int	i;
 	int	j;
-	int	n_com;
 
 	i = 0;
 	j = i;
-	n_com = -1;
 	while (str[i])
 	{
 		if (str[i] == '\'')
-			while (str[++i] != '\'')
-				;
+			while (str[++i] != '\'' || !str[i])
+				if (!str[i])
+					return (error_parsing("Error expected one ' more"));
 		if (str[i] == '"')
-			while (str[++i] != '"')
-				;
+			while (str[++i] != '"' || !str[i])
+				if (!str[i])
+					return (error_parsing("Error expected one \" more"));
 		if (str[i] == '|')
 			if (new_command(str, j, i - 1))
 				return (1);
