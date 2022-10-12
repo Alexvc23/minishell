@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:32:46 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/09 07:46:01 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 10:25:06 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	free_tab(char **tab, int n)
 			free(tab[i]);
 		i++;
 	}
-	free(tab);
+	if (tab)
+		free(tab);
 }
 
 void	free_commands(t_cmd **commands)

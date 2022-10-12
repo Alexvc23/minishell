@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 10:11:24 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 11:19:09 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,26 @@ typedef struct s_env
 typedef struct s_cmd
 {
 	char			*com;
-	int				n_args;
 	char			**args;
-	int				n_rdirs;
+	int				n_args;
 	int				*rdir_types;
 	char			**files;
+	int				n_rdirs;
 	char			*in;
 	char			*out;
 	int				heredoc;
 	int				append;
 	struct s_cmd	*next;
 }	t_cmd;
+
+	//*com;			->	commande string
+	//**args;		->	arguments string list
+	//n_args;		->	nombre de d'arguments
+	//n_rdirs;		->	nombre de redirections
+	//*rdir_types;	->	redirections types list
+	//**files;		->	redirections string list
+	//*in;			->	string in
+	//*out;			->	string out
 
 typedef struct s_shell {
 	int				stdin;
@@ -90,9 +99,17 @@ typedef struct s_shell {
 	t_env			*env;
 	t_cmd			*cmd;
 	int				n_cmd;
-	char			*entry;
 	int				*pids;
 }	t_shell;
+
+	//stdin		->	
+	//stdout	->	
+	//stderr	->	
+	//status	->	errno
+	//*env		->	variables d'environnement
+	//*cmd		->	commandes
+	//n_cmd		->	nombre de commandes
+	//*pids		->	pid des processus (enfants/parent)
 
 t_shell	g_vars;
 

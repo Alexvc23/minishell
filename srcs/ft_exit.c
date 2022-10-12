@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 15:25:13 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/11 08:53:40 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 10:23:06 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int	ft_exit(t_cmd *cmd)
 	else
 		exit_status = 0;
 	//reset_terminal(g_vars);
-	free(g_vars.pids);
+	if (g_vars.pids)
+		free(g_vars.pids);
 	free_commands(&g_vars.cmd);
 	free_envs(&g_vars.env);
 	exit(exit_status);

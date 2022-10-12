@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 19:48:31 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 10:15:54 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 10:31:19 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,11 @@ void	ft_free(void **arr)
 	if (arr)
 	{
 		while (arr[i])
-			free(arr[i++]);
+		{
+			if (arr[i])
+				free(arr[i]);
+			i++;
+		}
 		free(arr);
 	}
 }
@@ -312,15 +316,15 @@ pid_t	exec_type(t_cmd *cmd, t_env **env, int id)
 	return (exec_pipe(cmd, env));
 }
 
-void	exec_wait(t_cmd *cmd, unsigned int cmdsize)
+void	exec_wait()
 {
 	int				status;
 	unsigned int	i;
 
-	if (cmdsize > 1 || (cmd && !ft_is_builtin(cmd)))
+	if (g_vars.n_cmd > 1 || (g_vars.cmd && !ft_is_builtin(g_vars.cmd)))
 	{
 		i = -1;
-		while (++i < cmdsize)
+		while (++i < (unsigned int)g_vars.n_cmd)
 			waitpid(g_vars.pids[i], &status, 0);
 		if (WIFEXITED(status))
 			g_vars.status = WEXITSTATUS(status);
@@ -331,28 +335,27 @@ void	exec_wait(t_cmd *cmd, unsigned int cmdsize)
 		}
 	}
 	g_vars.n_cmd = 0;
-	free(g_vars.pids);
+	if (g_vars.pids)
+		free(g_vars.pids);
 }
 
 void	exec(void)
 {
 	int		i;
-	int		cmdsize;
 
-	cmdsize = ft_cmd_size(g_vars.cmd);
-	g_vars.n_cmd = cmdsize;
-	g_vars.pids = calloc(cmdsize, sizeof(int));
-	if (!g_vars.cmd || !cmdsize || !g_vars.pids)
+	g_vars.n_cmd = ft_cmd_size(g_vars.cmd);
+	g_vars.pids = calloc(g_vars.n_cmd, sizeof(int));
+	if (!g_vars.n_cmd || !g_vars.pids)
 		return ;
 	i = 0;
-	while (i < cmdsize)
+	while (i < g_vars.n_cmd)
 	{
 		g_vars.pids[i] = exec_type(g_vars.cmd, &g_vars.env, i);
 		if (g_vars.cmd->next)
 			g_vars.cmd = g_vars.cmd->next;
 		i++;
 	}
-	exec_wait(g_vars.cmd, cmdsize);
+	exec_wait();
 	//i = ft_counter(cmd); //compte le nombre d'arguments dans la commande
 	//ft_update_env(&g_vars->env, ft_strdup("_"), ft_strdup(cmd->argv[i])); //update key "_" in env with the last arg of the command ?
 
@@ -394,7 +397,8 @@ int	ft_prompt(void)
 	add_history(str);
 	exec();
 	free_commands(&g_vars.cmd);
-	free(str);
+	if (str)
+		free(str);
 	return (0);
 }
 
