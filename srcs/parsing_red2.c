@@ -1,0 +1,58 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_red2.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/09 06:47:25 by abouchet          #+#    #+#             */
+/*   Updated: 2022/10/09 08:03:27 by abouchet         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/minishell.h"
+
+void	parse_rdir_type(char *str, int *i, t_cmd *command)
+{
+	if (str[*i] == '<')
+	{
+		if (str[++(*i)] == '<')
+		{
+			command->rdir_types[command->n_rdirs] = LEFT_DBL_R;
+			(*i)++;
+		}
+		else
+			command->rdir_types[command->n_rdirs] = LEFT_SGL_R;
+	}
+	else if (str[*i] == '>')
+	{
+		if (str[++(*i)] == '>')
+		{
+			command->rdir_types[command->n_rdirs] = RIGHT_DBL_R;
+			(*i)++;
+		}
+		else
+			command->rdir_types[command->n_rdirs] = RIGHT_SGL_R;
+	}
+}
+
+int	parse_files(char *str, int *i, t_cmd *command)
+{
+	int	start;
+	int	end;
+
+	start = start_c(str, *i);
+	end = end_red(str, start);
+	command->files[command->n_rdirs] = malloc(sizeof(char) * (end - start + 2));
+	if (!(command->files[command->n_rdirs]))
+		return (error_parsing("Malloc Error"));
+	*i = 0;
+	while (start + *i <= end)
+	{
+		command->files[command->n_rdirs][*i] = str[start + *i];
+		(*i)++;
+	}
+	command->files[command->n_rdirs][*i] = '\0';
+	*i = end;
+	return (0);
+}
