@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:38:30 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 14:30:38 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 14:53:50 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ int	parse_command(char **str, t_cmd *command)
 
 	start = start_c(*str, 0);
 	end = end_arg(*str, start);
+	if (start > end)
+		return (1);
 	command->com = malloc(sizeof(char) * (end - start + 2));
 	if (!(command->com))
-		return (error_parsing("Malloc Error"));
+		return (error_parsing("Malloc Error\n", 2));
 	i = 0;
 	while (start + i <= end)
 	{
@@ -63,20 +65,21 @@ int	new_command(char *str, int start, int end)
 
 	new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
-		return (error_parsing("Malloc Error"));
+		return (error_parsing("Malloc Error\n", 2));
 	init_command(new_cmd);
 	cmd_str = ft_substr(str, start, end - start);
-	if (find_var(&cmd_str, g_vars.env))
+	if (find_var(&cmd_str, g_vars.env)
+		|| redirections(&cmd_str, new_cmd)
+		|| parse_command(&cmd_str, new_cmd)
+		|| arguments(&cmd_str, new_cmd))
+	{
+		add_back_cmd(&g_vars.cmd, new_cmd);
+		free(cmd_str);
 		return (1);
-	if (redirections(&cmd_str, new_cmd))
-		return (1);
-	if (parse_command(&cmd_str, new_cmd))
-		return (1);
+	}
 	remove_quotes(&(new_cmd->com));
-	if (arguments(&cmd_str, new_cmd))
-		return (1);
-	free(cmd_str);
 	add_back_cmd(&g_vars.cmd, new_cmd);
+	free(cmd_str);
 	return (0);
 }
 
@@ -92,11 +95,11 @@ int	create_commands(char *str)
 		if (str[i] == '\'')
 			while (str[++i] != '\'' || !str[i])
 				if (!str[i])
-					return (error_parsing("Error expected one ' more"));
+					return (error_parsing("Error expected one ' more\n", 2));
 		if (str[i] == '"')
 			while (str[++i] != '"' || !str[i])
 				if (!str[i])
-					return (error_parsing("Error expected one \" more"));
+					return (error_parsing("Error expected one \" more\n", 2));
 		if (str[i] == '|')
 			if (new_command(str, j, i - 1))
 				return (1);

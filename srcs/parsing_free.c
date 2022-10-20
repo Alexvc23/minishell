@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:32:46 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 10:25:06 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 14:19:44 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,6 @@ void	free_commands(t_cmd **commands)
 			free((*commands)->rdir_types);
 			free_tab((*commands)->files, (*commands)->n_rdirs);
 		}
-		if ((*commands)->in)
-			free((*commands)->in);
-		if ((*commands)->out)
-			free((*commands)->out);
 		free(*commands);
 		*commands = temp;
 	}
@@ -68,10 +64,9 @@ void	free_envs(t_env **envs)
 	}
 }
 
-int	error_parsing(char *err_str)
+int	error_parsing(char *err_str, int fd)
 {
-	free_envs(&g_vars.env);
 	free_commands(&g_vars.cmd);
-	printf("%s\n", err_str);
+	ft_putstr_fd(err_str, fd);
 	return (1);
 }

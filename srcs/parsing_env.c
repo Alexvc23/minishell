@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:36:21 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/09 08:00:03 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 14:22:02 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	new_env(char *str, t_env **envs)
 
 	new_elem = malloc(sizeof(t_env));
 	if (!new_elem)
-		return (error_parsing("Malloc Error"));
+		return (error_parsing("Malloc Error\n", 2));
 	equal = 0;
 	while (str[equal] && str[equal] != '=')
 		equal++;

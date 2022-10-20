@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 12:33:13 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:12:28 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ typedef struct s_cmd
 	int				n_rdirs;
 	char			*in;
 	char			*out;
+	int				heredoc;
+	int				append;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -139,6 +141,9 @@ int		redirections(char **str, t_cmd *command);
 
 void	parse_rdir_type(char *str, int *i, t_cmd *command);
 int		parse_files(char *str, int *i, t_cmd *command);
+int		check_redirections(char c);
+int		redirect_output(t_cmd *cmd, int i);
+int		redirect_input(t_cmd *cmd, int i);
 
 //ARGUMENTS
 int		count_arguments(char *str);
@@ -174,7 +179,7 @@ void	print_env(t_env *envs);
 void	free_tab(char **tab, int n);
 void	free_commands(t_cmd **commands);
 void	free_envs(t_env **envs);
-int		error_parsing(char *err_str);
+int		error_parsing(char *err_str, int fd);
 
 ////////////////////////////////////////////////
 ////////////////////SIGNALS/////////////////////

@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:40:01 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 14:28:08 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 17:06:53 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,6 @@ void	init_command(t_cmd *new_cmd)
 	new_cmd->in = NULL;
 	new_cmd->out = NULL;
 	new_cmd->next = NULL;
+	new_cmd->heredoc = 0;
+	new_cmd->append = 0;
 }

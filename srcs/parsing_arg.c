@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:42:21 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 13:46:28 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 14:23:10 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	parse_args(char *str, int start, int end, t_cmd *command)
 
 	command->args[command->n_args] = malloc(sizeof(char) * (end - start + 2));
 	if (!(command->args[command->n_args]))
-		return (error_parsing("Malloc Error"));
+		return (error_parsing("Malloc Error\n", 2));
 	i = 0;
 	while (start + i <= end)
 	{
@@ -99,7 +99,7 @@ int	arguments(char **str, t_cmd *command)
 		command->args = malloc(
 				sizeof(char *) * (count_arguments(*str) + 1));
 		if (!(command->args))
-			return (error_parsing("Malloc Error"));
+			return (error_parsing("Malloc Error\n", 2));
 		if (create_argument(str, command))
 			return (1);
 	}

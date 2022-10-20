@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:47:25 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/09 08:03:27 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:11:42 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	parse_files(char *str, int *i, t_cmd *command)
 	end = end_red(str, start);
 	command->files[command->n_rdirs] = malloc(sizeof(char) * (end - start + 2));
 	if (!(command->files[command->n_rdirs]))
-		return (error_parsing("Malloc Error"));
+		return (error_parsing("Malloc Error\n", 2));
 	*i = 0;
 	while (start + *i <= end)
 	{
@@ -54,5 +54,72 @@ int	parse_files(char *str, int *i, t_cmd *command)
 	}
 	command->files[command->n_rdirs][*i] = '\0';
 	*i = end;
+	return (0);
+}
+
+int	check_redirections(char c)
+{
+	if (ft_strchr("|&;()<>", c))
+	{
+		ft_putstr_fd("Minishell: syntax error near unexpected token `", 2);
+		if (!c)
+			ft_putstr_fd("newline", 2);
+		else
+			ft_putchar_fd(c, 2);
+		ft_putstr_fd("'\n", 2);
+		return (1);
+	}
+	return (0);
+}
+
+int	redirect_output(t_cmd *cmd, int i)
+{
+	int	is_open;
+
+	is_open = 0;
+	if (cmd->rdir_types[i] == RIGHT_SGL_R)
+	{
+		is_open = open(cmd->files[i], O_WRONLY | O_TRUNC | O_CREAT, 0777);
+		cmd->out = cmd->files[i];
+		cmd->append = 0;
+	}
+	else if (cmd->rdir_types[i] == RIGHT_DBL_R)
+	{
+		is_open = open(cmd->files[i], O_WRONLY | O_APPEND | O_CREAT, 0777);
+		cmd->out = cmd->files[i];
+		cmd->append = 1;
+	}
+	if (is_open < 0)
+	{
+		ft_putstr_fd(cmd->files[i], 2);
+		ft_putstr_fd(" : Cannot access file or directory\n", 2);
+		return (1);
+	}
+	if (is_open != 0)
+		close(is_open);
+	return (0);
+}
+
+int	redirect_input(t_cmd *cmd, int i)
+{
+	int	is_open;
+
+	is_open = 0;
+	if (cmd->rdir_types[i] == LEFT_SGL_R)
+	{
+		is_open = open(cmd->files[i], O_RDONLY);
+		cmd->in = cmd->files[i];
+	}
+	else if (cmd->rdir_types[i] == LEFT_DBL_R)
+		cmd->heredoc++;
+	if (is_open < 0)
+	{
+		ft_putstr_fd("Minishell : ", 2);
+		ft_putstr_fd(cmd->files[i], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return (1);
+	}
+	if (is_open != 0)
+		close(is_open);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:43:48 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/09 08:03:40 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:10:30 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,16 @@ int	new_redirection(char **str, int start, t_cmd *command)
 
 	end = start;
 	parse_rdir_type(*str, &end, command);
+	if (check_redirections((*str)[end]))
+		return (1);
 	if (parse_files(*str, &end, command))
 		return (1);
 	remove_char(str, start, end);
 	remove_quotes(&(command->files[command->n_rdirs]));
 	(command->n_rdirs)++;
+	if (redirect_output(command, command->n_rdirs - 1)
+		|| redirect_input(command, command->n_rdirs - 1))
+		return (1);
 	return (0);
 }
 
@@ -75,6 +80,7 @@ int	create_redirection(char **str, t_cmd *command)
 		}
 		i++;
 	}
+	command->files[command->n_rdirs] = NULL;
 	return (0);
 }
 
@@ -88,11 +94,11 @@ int	redirections(char **str, t_cmd *command)
 		command->rdir_types = malloc(
 				sizeof(int) * count_redirections(*str));
 		if (!(command->rdir_types))
-			return (error_parsing("Malloc Error"));
+			return (error_parsing("Malloc Error\n", 2));
 		command->files = malloc(
 				sizeof(char *) * count_redirections(*str));
 		if (!(command->files))
-			return (error_parsing("Malloc Error"));
+			return (error_parsing("Malloc Error\n", 2));
 		if (create_redirection(str, command))
 			return (1);
 	}

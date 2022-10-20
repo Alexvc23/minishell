@@ -6,14 +6,14 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 19:48:31 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 14:27:03 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:13:37 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 /* we count the number of nodes in a linked list passing as argumet its head */
-int	ft_size_list(t_env *head)
+int	ft_env_size(t_env *head)
 {
 	int		count;
 	t_env	*ptr;
@@ -168,7 +168,7 @@ char	**ft_env_to_array(t_env **env)
 	int		envsize;
 	int		i;
 
-	envsize = ft_size_list(*env);
+	envsize = ft_env_size(*env);
 	arr = malloc(sizeof(char *) * (envsize + 1));
 	arr[envsize] = NULL;
 	if (!envsize)
@@ -269,7 +269,7 @@ void	dup_redirec(t_cmd *cmd)
 	int	in;
 	int	out;
 
-	if (cmd->in)//&& !cmd->heredoc
+	if (cmd->in && !cmd->heredoc)
 	{
 		in = open(cmd->in, O_RDONLY, 0777);
 		if (in < 0)
@@ -280,10 +280,8 @@ void	dup_redirec(t_cmd *cmd)
 	if (cmd->out)
 	{
 		out = open(cmd->out, O_WRONLY | O_CREAT | (
-					O_TRUNC) | (
-					O_APPEND), 0777);
-					//O_TRUNC * (cmd->append != 2)) | (
-					//O_APPEND * (cmd->append == 2)), 0777);
+					O_TRUNC * (cmd->append == 0)) | (
+					O_APPEND * (cmd->append > 0)), 0777);
 		if (out < 0)
 			exit(1);
 		dup2(out, STDOUT_FILENO);
@@ -371,8 +369,8 @@ pid_t	exec_type(t_cmd *cmd, t_env **env, int id)
 {
 	int	pid;
 
-	//if (cmd->heredoc)
-	//	pid = exec_heredoc(cmd);
+	if (cmd->heredoc)
+		pid = exec_heredoc(cmd);
 	if (!cmd->next)
 	{
 		dup2(g_vars.stdout, STDOUT_FILENO);
@@ -412,6 +410,7 @@ void	exec(void)
 	t_cmd	*cmd;
 
 	cmd = g_vars.cmd;
+	g_vars.n_cmd = ft_cmd_size(g_vars.cmd);
 	g_vars.pids = calloc(g_vars.n_cmd, sizeof(int));
 	if (!g_vars.n_cmd || !g_vars.pids)
 		return ;
@@ -458,11 +457,11 @@ int	ft_prompt(void)
 	str = readline(BOLD PINK "Minishell_> " END);
 	if (!str)
 		ft_exit(NULL);
-
-	g_vars.n_cmd = ft_cmd_size(g_vars.cmd);
 	if (create_commands(str) == 0)
+	{
+		//print_com(g_vars.cmd);
 		exec();
-	print_com(g_vars.cmd);
+	}
 	free_commands(&g_vars.cmd);
 	add_history(str);
 	if (str)
@@ -494,7 +493,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argv;
 	if (argc != 1)
-		return (error_parsing("Error Minishell called with too much argv"));
+		return (error_parsing("Error Minishell called with too much argv\n", 2));
 	signal(SIGINT, handler_shell);
 	signal(SIGQUIT, handler_shell);
 	init_shell(envp);
