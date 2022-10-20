@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:45:43 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/11 04:46:33 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 19:01:09 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	check_var(char **str, int *i, t_env *env)
 	{
 		start = *i;
 		(*i)++;
-		while ((*str)[*i] && ft_isalnum((*str)[*i]))
+		while ((*str)[*i] && (ft_isalnum((*str)[*i]) || (*str)[*i] == '_'))
 			(*i)++;
 		replace_var(str, start, *i - 1, env);
 		*i = start;
