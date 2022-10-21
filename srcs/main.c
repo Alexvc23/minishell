@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 19:48:31 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/20 19:13:24 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/21 19:30:17 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,15 +432,15 @@ void	exec(void)
 
 ////////////////////////////////SIGNALS + MAIN//////////////////////////////////
 
-void	handler_shell(int status)
+void	handler_shell(int sig)
 {
-	if (status == SIGINT)
+	if (sig == SIGINT)
 	{
 		rl_redisplay();
 		rl_replace_line("", 0);
 		write(1, "\n", 1);
 	}
-//	else if (status == SIGQUIT)
+//	else if (sig == SIGQUIT)
 //	{
 //		write(1, "\n", 1);
 //		rl_replace_line("", 0);

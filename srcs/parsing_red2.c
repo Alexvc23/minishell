@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:47:25 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/20 15:11:42 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/21 19:37:30 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	redirect_input(t_cmd *cmd, int i)
 		cmd->in = cmd->files[i];
 	}
 	else if (cmd->rdir_types[i] == LEFT_DBL_R)
-		cmd->heredoc++;
+		wait_heredoc(cmd);
 	if (is_open < 0)
 	{
 		ft_putstr_fd("Minishell : ", 2);
