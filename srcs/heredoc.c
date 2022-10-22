@@ -6,22 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/21 19:51:48 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 17:13:02 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-//need to change it for arthur parsing
-
-void	ft_heredoc_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		if (g_vars.h_pid)
-			kill(g_vars.h_pid, 15);
-	}
-}
 
 char	*ft_heredoc(t_cmd *cmd, char *final_line)
 {
@@ -80,7 +69,7 @@ int	wait_heredoc(t_cmd *cmd)
 {
 	int	status;
 
-	signal(SIGINT, ft_heredoc_handler);
+	signal(SIGINT, handler_heredoc);
 	g_vars.h_pid = ft_heredoc_fork(cmd);
 	if (g_vars.h_pid == 0)
 		exit(0);

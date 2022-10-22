@@ -6,91 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/11 08:46:14 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 17:39:27 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static t_env	*ft_new_node(char *key, char *value)
-{
-	t_env	*new;
-
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return (NULL);
-	new->key = key;
-	new->value = value;
-	new->next = NULL;
-	return (new);
-}
-
-static t_env	*ft_last_node(t_env *head)
-{
-	t_env	*tmp;
-
-	if (!head)
-		return (0);
-	tmp = head;
-	while (tmp->next)
-		tmp = tmp->next;
-	return (tmp);
-}
-
-static void	ft_add_node_back(t_env **head, t_env *new)
-{
-	t_env	*ptr;
-
-	ptr = *head;
-	if (!new)
-		return ;
-	if (!*head)
-	{
-		*head = new;
-		return ;
-	}
-	ptr = ft_last_node(*head);
-	ptr->next = new;
-}
-
-static char	*ft_get_node_value(t_env **head, char *key)
-{
-	t_env	*tmp;
-
-	tmp = *head;
-	if (!*head)
-		return (NULL);
-	while (tmp)
-	{
-		if (!ft_strncmp(tmp->key, key, ft_strlen(key) + 1))
-			return (tmp->value);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
-static void	ft_update_env(t_env **env, char *key, char *value)
-{
-	t_env	*tmp;
-
-	tmp = *env;
-	if (!env || !key || !value)
-		return ;
-	while (tmp)
-	{
-		if (!ft_strncmp(key, tmp->key, ft_strlen(key) + 1))
-		{
-			free(tmp->value);
-			free(key);
-			tmp->value = value;
-			return ;
-		}
-		tmp = tmp->next;
-	}
-	tmp = *env;
-	ft_add_node_back(&tmp, ft_new_node(key, value));
-	return ;
-}
 
 /* Allows to print error messages to stderr, customizing it's behavior
    whether printing a cmd error or a specific message: returns the specified 
@@ -138,12 +58,11 @@ static int	ft_go_to(t_env **env, char *path, int cd_type)
 	char	*new;
 	int		err_type;
 
-	printf("BBBBBBBB\n");
 	old_wd = getcwd(NULL, 0);
 	new = path;
 	if (!old_wd || !path)
 		err_type = ft_error("No env variable found", NULL, 1);
-	ft_update_env(env, ft_strdup("OLDPWD"), ft_strdup(old_wd));
+	update_env(env, ft_strdup("OLDPWD"), ft_strdup(old_wd));
 	if (cd_type == CD_HOME_AND_PATH)
 		new = ft_strjoin(ft_get_node_value(env, "HOME"), path);
 	else if (cd_type == CD_CURREN_AND_PATH)
@@ -153,7 +72,7 @@ static int	ft_go_to(t_env **env, char *path, int cd_type)
 	err_type = ft_chdir(new);
 	if (cd_type == CD_OLD)
 		printf("%s\n", getcwd(NULL, 0));
-	ft_update_env(env, ft_strdup("PWD"), getcwd(NULL, 0));
+	update_env(env, ft_strdup("PWD"), getcwd(NULL, 0));
 	free(new);
 	return (err_type);
 }
@@ -176,14 +95,17 @@ int	ft_cd(t_cmd *cmd, t_env **env)
 	if (!cmd->n_args
 		|| (cmd->n_args == 2 && !ft_strncmp(cmd->args[1], "~", 2))
 		|| (cmd->n_args == 2 && !ft_strncmp(cmd->args[1], "--", 3)))
-		return (ft_go_to(env, ft_strdup(ft_get_node_value(env, "HOME")), CD_HOME));
+		return (ft_go_to(env,
+				ft_strdup(ft_get_node_value(env, "HOME")), CD_HOME));
 	if ((cmd->n_args == 2 && !ft_strncmp(cmd->args[1], "-", 2)))
-		return (ft_go_to(env, ft_strdup(ft_get_node_value(env, "OLDPWD")), CD_OLD));
+		return (ft_go_to(env,
+				ft_strdup(ft_get_node_value(env, "OLDPWD")), CD_OLD));
 	if ((cmd->n_args == 2 && !ft_strncmp(cmd->args[1], "~/", 3)))
 		return (ft_go_to(env, ft_strdup((cmd->args[1] + 1)), CD_HOME_AND_PATH));
 	if ((cmd->n_args == 2 && !ft_strncmp(cmd->args[1], "/", 2)))
 		return (ft_go_to(env, ft_strdup((cmd->args[1])), CD_ABSOLUTE));
 	if ((cmd->n_args == 2 && cmd->args[1]))
-		return (ft_go_to(env, ft_strjoin("/", cmd->args[1]), CD_CURREN_AND_PATH));
+		return (ft_go_to(env,
+				ft_strjoin("/", cmd->args[1]), CD_CURREN_AND_PATH));
 	return (0);
 }

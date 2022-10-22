@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/21 19:40:14 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 17:44:08 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,22 +184,45 @@ void	free_commands(t_cmd **commands);
 void	free_envs(t_env **envs);
 int		error_parsing(char *err_str, int fd);
 
-////////////////////////////////////////////////
-////////////////////HEREDOC/////////////////////
-////////////////////////////////////////////////
-
+//HEREDOC
 int		wait_heredoc(t_cmd *stru);
 
 ////////////////////////////////////////////////
-////////////////////SIGNALS/////////////////////
+/////////////////////EXEC///////////////////////
 ////////////////////////////////////////////////
 
-////////////////////////////////////////////////
-////////////////////TERMIOS/////////////////////
-////////////////////////////////////////////////
+//env utils
+void	update_env(t_env **env, char *key, char *value);
 
-void	ft_termios(void);
-void	reset_termios(void);
+char	*ft_get_node_value(t_env **head, char *key);
+char	**ft_env_to_key_array(t_env **env);
+char	**ft_env_to_array(t_env **env);
+void	free_arr(void **arr);
+
+int		ft_env_size(t_env *head);
+int		ft_cmd_size(t_cmd *cmd);
+
+//EXEC utils
+void	dup_redirec(t_cmd *cmd);
+
+//EXEC BUILTIN
+int		ft_is_builtin(t_cmd *cmd);
+int		exec_builtin(t_cmd *cmd, t_env **env);
+
+//EXEC COMMAND
+char	*ft_find_path(char **env);
+char	*ft_get_cmd(char *v_path, char *cmd);
+void	exec_cmd(t_cmd *cmd, t_env **env);
+
+//EXEC TYPE
+pid_t	exec_single(t_cmd *cmd, t_env **env, int id);
+pid_t	exec_heredoc(t_cmd *cmd);
+pid_t	exec_pipe(t_cmd *cmd, t_env **env);
+pid_t	exec_type(t_cmd *cmd, t_env **env, int id);
+
+//EXEC
+void	exec_wait(t_cmd *cmd);
+void	exec(void);
 
 ////////////////////////////////////////////////
 ////////////////////BUILTINS////////////////////
@@ -212,5 +235,28 @@ int		ft_unset(t_cmd *cmd, t_env **env);
 int		ft_env(t_cmd *cmd, t_env **env);
 int		ft_pwd(t_cmd *cmd, t_env **env);
 int		ft_cd(t_cmd *cmd, t_env **env);
+
+////////////////////////////////////////////////
+////////////////////SIGNALS/////////////////////
+////////////////////////////////////////////////
+
+void	handler_heredoc(int sig);
+void	handler_shell(int sig);
+
+////////////////////////////////////////////////
+////////////////////TERMIOS/////////////////////
+////////////////////////////////////////////////
+
+void	ft_termios(void);
+void	reset_termios(void);
+
+////////////////////////////////////////////////
+////////////////////PROMPT//////////////////////
+////////////////////////////////////////////////
+
+int		ft_prompt(void);
+void	ft_increase_shlvl(t_env	*env);
+void	init_shell(char **envp);
+int		main(int argc, char **argv, char **envp);
 
 #endif
