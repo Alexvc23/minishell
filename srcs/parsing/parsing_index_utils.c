@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:52:17 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/09 06:52:43 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:17:36 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 int	is_whitespace(char c)
 {

@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 14:18:29 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/11 08:48:56 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:16:18 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 /* echo function with -n argument will skip \n at the end of line 
    addtionally, we handle error checking by allowing the argument -n

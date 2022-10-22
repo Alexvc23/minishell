@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 15:25:13 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/12 18:58:41 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:16:33 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 /* 
 https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins

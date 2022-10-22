@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:38:30 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/20 14:53:50 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:17:18 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 int	parse_command(char **str, t_cmd *command)
 {

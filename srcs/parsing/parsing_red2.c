@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:47:25 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/21 19:37:30 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:18:05 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	parse_rdir_type(char *str, int *i, t_cmd *command)
 {

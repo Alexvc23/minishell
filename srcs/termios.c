@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 18:05:04 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/20 19:50:06 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:18:21 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 /* 
 we set attributes as needed for prompt, echoing passed input,

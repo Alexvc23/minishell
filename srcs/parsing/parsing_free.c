@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:32:46 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/20 14:19:44 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:17:31 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	free_tab(char **tab, int n)
 {

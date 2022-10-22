@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 12:04:02 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/22 16:52:18 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:15:17 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 /* we count the number of nodes in a linked list passing as argumet its env */
 int	ft_env_size(t_env *env)

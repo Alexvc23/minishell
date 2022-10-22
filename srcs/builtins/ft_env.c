@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 21:37:59 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/11 08:51:03 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:16:24 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 /* print environement variables stored in t_env struct*/
 int	ft_env(t_cmd *cmd, t_env **env)

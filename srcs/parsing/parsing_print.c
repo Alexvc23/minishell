@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:35:17 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/12 14:23:30 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:17:47 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	print_redirections(int *rdir_types, char **files, int n)
 {

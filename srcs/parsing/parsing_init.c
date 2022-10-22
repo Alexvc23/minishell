@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:40:01 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/21 19:30:05 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:17:42 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	init_command(t_cmd *new_cmd)
 {

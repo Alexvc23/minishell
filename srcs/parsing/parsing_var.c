@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:45:43 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/22 14:46:36 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:18:09 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	replace_var(char **str, int start, int end, t_env *env)
 {

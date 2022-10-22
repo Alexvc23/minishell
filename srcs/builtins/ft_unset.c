@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:33:23 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/11 08:55:57 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:16:51 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 static int	ft_is_valid_key(char *key)
 {

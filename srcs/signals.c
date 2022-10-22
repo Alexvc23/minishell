@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 17:10:08 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/22 17:40:28 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:18:15 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	handler_heredoc(int sig)
 {

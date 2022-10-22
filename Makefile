@@ -24,7 +24,6 @@ libft :
 	make -C $(LIBDIR) all
 
 $(NAME) : $(OBJS)
-	mkdir -p $(OBJ_DIR) $(SUBDIRS)
 	gcc $(FLAGS) $(LIBFT) $(RLINE) $(RDFLAGS) $(RLFLAGS) $(OBJS) -o $(NAME)
 
 clean :
@@ -37,7 +36,7 @@ fclean : clean
 re : fclean all
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c $(LIBFT)
-	gcc -I$(INCLDS) $(FLAGS) $(RDFLAGS) -c $< -o $@
+	gcc -I $(INCLDS) $(FLAGS) $(RDFLAGS) -c $< -o $@
 
 # rule to debug Makefile
 print:

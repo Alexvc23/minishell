@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 15:08:07 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/11 08:55:27 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:16:44 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 // Print current location in the system.
 

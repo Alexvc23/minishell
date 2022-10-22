@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:49:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/11 04:35:00 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:17:53 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	remove_quotes(char	**str)
 {

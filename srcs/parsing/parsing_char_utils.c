@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:51:21 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/09 07:51:52 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:17:11 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	remove_char(char **str, int start, int end)
 {

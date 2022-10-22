@@ -6,11 +6,11 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/22 17:39:27 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/22 18:16:12 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 /* Allows to print error messages to stderr, customizing it's behavior
    whether printing a cmd error or a specific message: returns the specified 
