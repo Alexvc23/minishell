@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/22 17:44:08 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/23 16:11:42 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int		create_commands(char *str);
 
 //REDIRECTIONS
 int		count_redirections(char *str);
+void	find_replace_tild(char **str, t_env *env);
 int		new_redirection(char **str, int start, t_cmd *command);
 int		create_redirection(char **str, t_cmd *command);
 int		redirections(char **str, t_cmd *command);

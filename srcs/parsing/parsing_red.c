@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:43:48 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/22 18:17:59 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/23 16:08:05 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,26 @@ int	count_redirections(char *str)
 	return (nb_redirections);
 }
 
+void	find_replace_tild(char **str, t_env *env)
+{
+	if ((*str)[0] && (*str)[0] == '~')
+	{
+		if ((*str)[1] && (*str)[1] == '/')
+		{
+			remove_char(str, 0, 0);
+			while (env)
+			{
+				if (!ft_strncmp("HOME", env->key, ft_strlen("HOME") + 1))
+				{
+					add_char(str, 0, env->value);
+					break ;
+				}
+				env = env->next;
+			}
+		}
+	}
+}
+
 int	new_redirection(char **str, int start, t_cmd *command)
 {
 	int		end;
@@ -51,6 +71,7 @@ int	new_redirection(char **str, int start, t_cmd *command)
 	if (parse_files(*str, &end, command))
 		return (1);
 	remove_char(str, start, end);
+	find_replace_tild(&(command->files[command->n_rdirs]), g_vars.env);
 	remove_quotes(&(command->files[command->n_rdirs]));
 	(command->n_rdirs)++;
 	if (redirect_output(command, command->n_rdirs - 1)
