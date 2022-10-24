@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/24 13:31:00 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 16:48:52 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	exec_wait(t_cmd *cmd)
 			g_vars.status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 		{
-			printf("%d\n", WTERMSIG(status));
 			g_vars.status = 128 + WTERMSIG(status);
 		}
 	}

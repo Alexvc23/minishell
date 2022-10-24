@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/22 18:15:41 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 16:17:58 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ void	exec_cmd(t_cmd *cmd, t_env **env)
 	path_cmd = ft_get_cmd(ft_find_path(arr_env), cmd->com);
 	execve(path_cmd, cmd->args, arr_env);
 	dup2(STDERR_FILENO, STDOUT_FILENO);
-	if (errno != 14 || (ft_strchr(cmd->com, '/')))
-		printf("%s: %s.\n", cmd->com, strerror(errno));
+	if (errno == 2)
+		printf("minishell: %s: command not found\n", cmd->com);
 	else
-		printf("Command '%s' not found.\n", cmd->com);
+		printf("%s: %s.\n", cmd->com, strerror(errno));
 	dup2(g_vars.stdout, STDOUT_FILENO);
 	free(path_cmd);
 	free_arr((void **)arr_env);

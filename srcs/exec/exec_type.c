@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/22 18:15:50 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 16:27:19 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,11 @@ pid_t	exec_single(t_cmd *cmd, t_env **env, int id)
 		return (-1);
 	if (pid)
 		return (pid);
-	dup_redirec(cmd);
-	exec_cmd(cmd, env);
+	else
+	{
+		dup_redirec(cmd);
+		exec_cmd(cmd, env);
+	}
 	return (pid);
 }
 

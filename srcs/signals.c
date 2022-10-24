@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 17:10:08 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/24 14:37:48 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 16:44:23 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	handler_shell(int sig)
 		return ;
 	if (sig == SIGINT)
 	{
+		g_vars.status = 1;
 		rl_redisplay();
 		rl_replace_line("", 0);
 		write(1, "\n", 1);

@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/24 14:26:23 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 15:36:53 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ int		create_commands(char *str);
 
 //REDIRECTIONS
 int		count_redirections(char *str);
-void	find_replace_tild(char **str, t_env *env);
 int		new_redirection(char **str, int start, t_cmd *command);
 int		create_redirection(char **str, t_cmd *command);
 int		redirections(char **str, t_cmd *command);
@@ -160,6 +159,9 @@ int		arguments(char **str, t_cmd *command);
 void	replace_var(char **str, int start, int end, t_env *env);
 int		check_var(char **str, int *i, t_env *env);
 int		find_var(char **str, t_env *env);
+
+void	replace_tild(char **str, int start, t_env *env);
+int		find_tild(char **str, t_env *env);
 
 //QUOTES
 void	remove_quotes(char	**str);
