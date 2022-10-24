@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 19:48:31 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/23 16:09:19 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 12:56:36 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	ft_prompt(void)
 
 	rl_on_new_line();
 	ft_termios();
+	signal(SIGINT, handler_shell);
+	signal(SIGQUIT, handler_shell);
 	str = readline(BOLD PINK "Minishell_> " END);
 	if (!str)
 		ft_exit(NULL);
@@ -50,6 +52,7 @@ void	init_shell(char **envp)
 	g_vars.stderr = dup(STDERR_FILENO);
 	create_envs(envp, &g_vars.env);
 	ft_increase_shlvl(g_vars.env);
+	g_vars.h_pid = 0;
 	g_vars.cmd = NULL;
 }
 //print_env(g_vars.env);
@@ -59,8 +62,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc != 1)
 		return (error_parsing("Error Minishell called with too much argv\n", 2));
-	signal(SIGINT, handler_shell);
-	signal(SIGQUIT, handler_shell);
 	init_shell(envp);
 	while (1)
 		if (ft_prompt())

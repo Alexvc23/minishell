@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 18:05:04 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/22 18:18:21 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 11:26:42 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,20 @@ stablishing cannocal input and enabling sign handling
 */
 void	ft_termios(void)
 {
-	int	result[2];
+	struct termios	attrs;
+	int				result[2];
 
-	result[0] = tcgetattr(0, &g_vars.term_save);
-	result[1] = tcgetattr(0, &g_vars.term_new);
+	result[0] = tcgetattr(STDIN_FILENO, &g_vars.term_save);
+	result[1] = tcgetattr(STDIN_FILENO, &attrs);
 	if (result[0] || result[1])
 		perror("tcsetattr\n");
-	g_vars.term_new.c_lflag = (ECHO | ICANON | ISIG);
-	if (tcsetattr(0, 0, &g_vars.term_new))
+	attrs.c_lflag = (ECHO | ICANON | ISIG);
+	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &attrs))
 		perror("tcsetattr\n");
 }
 
 /* restablished default termios attributes */
 void	reset_termios(void)
 {
-	tcsetattr(0, 0, &g_vars.term_save);
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &g_vars.term_save);
 }

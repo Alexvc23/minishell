@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 15:25:13 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/22 18:16:33 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 14:10:16 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_exit(t_cmd *cmd)
 	if (cmd && cmd->n_args >= 2 && !str_is_valid_num(cmd->args[1]))
 	{
 		ft_putstr_fd("exit: ", 2);
-		ft_putstr_fd(cmd->args[0], 2);
+		ft_putstr_fd(cmd->args[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
 		exit_status = 255;
 	}
@@ -50,7 +50,7 @@ int	ft_exit(t_cmd *cmd)
 		exit_status = 1;
 	}
 	else if (cmd && cmd->n_args == 2)
-		exit_status = ft_atoi(cmd->args[0]) % 256;
+		exit_status = ft_atoi(cmd->args[1]) % 256;
 	else
 		exit_status = 0;
 	free_commands(&g_vars.cmd);

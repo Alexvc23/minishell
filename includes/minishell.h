@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/23 16:11:42 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 14:26:23 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ typedef struct s_shell {
 	//stdin		->	
 	//stdout	->	
 	//stderr	->	
-	//status	->	errno
+	//status	->	status d'erreur de l'ancienne commande
 	//*env		->	variables d'environnement
 	//*cmd		->	commandes
 	//n_cmd		->	nombre de commandes
