@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:33:23 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/22 18:16:51 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/25 14:57:59 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 static int	ft_is_valid_key(char *key)
 {
+	int	i;
+
 	if (!key || !key[0])
 		return (0);
 	if (!ft_isalpha(key[0]) && key[0] != '_')
 		return (0);
-	while (*(++key))
+	i = 0;
+	while (key[i])
 	{
-		if (!ft_isalpha(*key) && !ft_isdigit(*key) && *key != '_')
-		{
-			if (*key == '=')
-				return (1);
+		if (!ft_isalpha(key[i]) && !ft_isdigit(key[i]) && key[i] != '_')
 			return (0);
-		}
+		i++;
 	}
 	return (1);
 }
@@ -49,7 +49,7 @@ static void	ft_del_env(t_env **env, char *key)
 
 	before = NULL;
 	tmp = *env;
-	while (tmp && !ft_strncmp(tmp->key, key, ft_strlen(key) + 1))
+	while (tmp && ft_strncmp(tmp->key, key, ft_strlen(key) + 1))
 	{
 		before = tmp;
 		tmp = tmp->next;
@@ -68,16 +68,29 @@ static void	ft_del_env(t_env **env, char *key)
 
 int	ft_unset(t_cmd *cmd, t_env **env)
 {
-	char	*key;
+	int		i;
+	int		valid;
 
-	if (cmd->n_args == 1)
-		return (0);
-	key = cmd->args[1];
-	if (!ft_is_valid_key(key))
+	valid = 1;
+	i = 1;
+	while (cmd->args[i])
 	{
-		ft_putstr_fd("Invalid key name.\n", 1);
-		return (1);
+		if (!ft_is_valid_key(cmd->args[i]))
+		{
+			ft_putstr_fd("minishell: unset: `", 1);
+			ft_putstr_fd(cmd->args[i], 1);
+			ft_putstr_fd("': not a valid identifier\n", 1);
+			valid = 0;
+		}
+		i++;
 	}
-	ft_del_env(env, key);
+	if (!valid)
+		return (1);
+	i = 1;
+	while (cmd->args[i])
+	{
+		ft_del_env(env, cmd->args[i]);
+		i++;
+	}
 	return (0);
 }

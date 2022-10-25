@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 16:58:13 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/22 18:16:39 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/25 18:05:26 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ static int	ft_sort_env_arr(t_env **env)
 
 static int	ft_export_err(char *err)
 {
-	ft_putstr_fd("Invalid key name: '", STDERR_FILENO);
+	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 	ft_putstr_fd(err, STDERR_FILENO);
-	ft_putstr_fd("'.\n", STDERR_FILENO);
+	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 	return (1);
 }
 

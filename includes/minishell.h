@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/24 15:36:53 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/25 17:04:16 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,9 @@
 # define RIGHT_DBL_R 3
 
 //builtin cd command
-# define CD_ABSOLUTE 1
+# define CD_STD 1
 # define CD_OLD 2
-# define CD_HOME_AND_PATH 3
-# define CD_HOME 4 
-# define CD_CURREN_AND_PATH 5
+# define CD_HOME 3
 
 typedef struct s_env
 {
