@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 16:58:13 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/25 18:05:26 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/25 19:15:46 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,36 +80,29 @@ static int	ft_sort_env_arr(t_env **env)
 	return (ft_putenv(env, keys));
 }
 
-static int	ft_export_err(char *err)
-{
-	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-	ft_putstr_fd(err, STDERR_FILENO);
-	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-	return (1);
-}
-
 static int	ft_export_one(char *str, t_env **env)
 {
 	char	*key;
 	char	*val;
-	int		err;
 	int		i;
 
 	key = str;
-	err = 0;
 	i = 0;
 	while (str[i] && str[i] != '=')
 		i++;
 	if (!ft_is_valid_key(key))
-		return (ft_export_err(key));
-	if (!str[i])
+	{
+		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+		ft_putstr_fd(key, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 		return (1);
+	}
 	str[i] = '\0';
 	val = &str[i + 1];
 	if (ft_is_valid_key(key))
 		update_env(env, ft_strdup(key), ft_strdup(val));
 	str[i] = '=';
-	return (err);
+	return (0);
 }
 
 int	ft_export(t_cmd *cmd, t_env **env)
@@ -126,5 +119,7 @@ int	ft_export(t_cmd *cmd, t_env **env)
 		status += ft_export_one(cmd->args[i], env);
 		i++;
 	}
-	return (status != 0);
+	if (status != 0)
+		return (1);
+	return (0);
 }

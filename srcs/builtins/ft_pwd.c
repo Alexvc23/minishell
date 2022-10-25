@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 15:08:07 by fdevigne          #+#    #+#             */
-/*   Updated: 2022/10/22 18:16:44 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/25 19:20:29 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_pwd(t_cmd *cmd, t_env **env)
 		return (1);
 	if (cmd->n_args > 1 && cmd->args[1][0] == '-')
 	{
-		ft_putstr_fd("pwd: No options handled\n", 2);
+		ft_putstr_fd("minishell: pwd: No options handled\n", 2);
 		return (1);
 	}
 	while (tmp)

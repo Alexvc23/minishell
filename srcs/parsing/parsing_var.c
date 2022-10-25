@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:45:43 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/24 15:38:18 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/25 20:08:30 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void	replace_var(char **str, int start, int end, t_env *env)
 
 int	check_var(char **str, int *i, t_env *env)
 {
-	int	start;
+	int		start;
+	char	*status;
 
 	if ((*str)[*i] == '$')
 	{
@@ -41,7 +42,9 @@ int	check_var(char **str, int *i, t_env *env)
 		if ((*str)[*i] == '?')
 		{
 			remove_char(str, start, *i);
-			add_char(str, start, ft_itoa(g_vars.status));
+			status = ft_itoa(g_vars.status);
+			add_char(str, start, status);
+			free(status);
 			return (0);
 		}
 		while ((*str)[*i] && (ft_isalnum((*str)[*i]) || (*str)[*i] == '_'))

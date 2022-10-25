@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:51:21 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/22 18:17:11 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/25 20:13:00 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,14 @@ void	add_char(char **str, int i, char *add)
 {
 	char	*str1;
 	char	*str2;
+	char	*tmp;
 
 	str1 = ft_substr(*str, 0, i);
 	str2 = ft_substr(*str, i, ft_strlen(*str) - i);
 	free(*str);
-	*str = ft_strjoin(str1, ft_strjoin(add, str2));
+	tmp = ft_strjoin(add, str2);
+	*str = ft_strjoin(str1, tmp);
+	free(tmp);
 	free(str1);
 	free(str2);
 }

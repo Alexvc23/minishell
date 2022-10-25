@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 19:48:31 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/25 18:34:44 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/25 19:58:40 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@ int	ft_prompt(void)
 {
 	char	*str;
 
-	rl_on_new_line();
 	ft_termios();
 	signal(SIGINT, handler_shell);
 	signal(SIGQUIT, handler_shell);
+	str = NULL;
 	str = readline(BOLD PINK "Minishell_> " END);
+	reset_termios();
 	if (!str)
 	{
 		ft_putstr_fd("exit\n", 1);
+		free_envs(&g_vars.env);
+		rl_clear_history();
 		exit(g_vars.status);
 	}
-	reset_termios();
 	if (create_commands(str) == 0)
 	{
 		exec();
@@ -41,11 +43,17 @@ int	ft_prompt(void)
 
 void	ft_increase_shlvl(t_env	*env)
 {
+	char	*lvl;
+
 	while (env->next
 		&& ft_strncmp(env->key, "SHLVL", ft_strlen("SHLVL") + 1))
 		env = env->next;
 	if (!ft_strncmp(env->key, "SHLVL", ft_strlen("SHLVL") + 1))
-		env->value = ft_itoa(ft_atoi(env->value) + 1);
+	{
+		lvl = ft_itoa(ft_atoi(env->value) + 1);
+		free(env->value);
+		env->value = lvl;
+	}
 }
 
 void	init_shell(char **envp)
