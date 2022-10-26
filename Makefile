@@ -36,6 +36,7 @@ fclean : clean
 re : fclean all
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c $(LIBFT)
+	mkdir -p $(OBJ_DIR) $(SUBDIRS)
 	gcc -I $(INCLDS) $(FLAGS) $(RDFLAGS) -c $< -o $@
 
 # rule to debug Makefile
