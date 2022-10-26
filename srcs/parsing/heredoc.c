@@ -6,41 +6,44 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/24 12:54:12 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 19:04:24 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_heredoc(t_cmd *cmd, char *final_line)
+int	ft_heredoc(char **final_line, char *heredoc_str)
 {
 	int		delimiter_found;
 	char	*line;
 	char	*temp;
 
+	if (*final_line)
+		free(*final_line);
 	delimiter_found = 1;
-	final_line = ft_strdup("");
+	*final_line = ft_strdup("");
 	while (delimiter_found)
 	{
 		line = readline(RED "HEREDOC> " END);
 		if (!line)
 			break ;
-		delimiter_found = ft_strncmp(line, cmd->files[cmd->n_rdirs - 1],
+		delimiter_found = ft_strncmp(line, heredoc_str,
 				ft_strlen(line) + 1);
 		if (delimiter_found)
 		{
-			temp = ft_strjoin(final_line, line);
-			free(final_line);
-			final_line = ft_strjoin(temp, "\n");
+			temp = ft_strjoin(*final_line, line);
+			free(*final_line);
+			*final_line = ft_strjoin(temp, "\n");
 			free(temp);
 		}
 		free(line);
 	}
-	find_var(&final_line, g_vars.env);
-	return (final_line);
+	if (find_var(final_line, g_vars.env))
+		return (1);
+	return (0);
 }
 
-pid_t	ft_heredoc_fork(t_cmd *cmd)
+/*pid_t	ft_heredoc_fork(char *heredoc_str)
 {
 	pid_t	pid;
 	int		files[2];
@@ -59,18 +62,18 @@ pid_t	ft_heredoc_fork(t_cmd *cmd)
 		close(files[1]);
 		return (pid);
 	}
-	final_line = ft_heredoc(cmd, NULL);
+	final_line = ft_heredoc(heredoc_str, NULL);
 	write(files[1], final_line, ft_strlen(final_line));
 	free(final_line);
 	return (pid);
 }
 
-int	wait_heredoc(t_cmd *cmd)
+int	wait_heredoc(char *heredoc_str)
 {
 	int	status;
 
 	signal(SIGINT, handler_heredoc);
-	g_vars.h_pid = ft_heredoc_fork(cmd);
+	g_vars.h_pid = ft_heredoc_fork(heredoc_str);
 	if (g_vars.h_pid == 0)
 		exit(0);
 	waitpid(g_vars.h_pid, &status, 0);
@@ -85,4 +88,4 @@ int	wait_heredoc(t_cmd *cmd)
 		return (7);
 	}
 	return (0);
-}
+}*/

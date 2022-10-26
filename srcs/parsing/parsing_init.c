@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:40:01 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/22 18:17:42 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 18:38:13 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ void	init_command(t_cmd *new_cmd)
 	new_cmd->rdir_types = NULL;
 	new_cmd->files = NULL;
 	new_cmd->in = NULL;
+	new_cmd->in_heredoc = NULL;
 	new_cmd->out = NULL;
-	new_cmd->next = NULL;
 	new_cmd->heredoc = 0;
 	new_cmd->append = 0;
+	new_cmd->next = NULL;
 }

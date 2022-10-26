@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/24 16:27:19 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 18:19:35 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ pid_t	exec_single(t_cmd *cmd, t_env **env, int id)
 
 	if (id == 0 && ft_is_builtin(cmd))
 	{
-		dup_redirec(cmd);
+		dup_redirect(cmd);
 		g_vars.status = exec_builtin(cmd, env);
 		dup2(g_vars.stdin, STDIN_FILENO);
 		dup2(g_vars.stderr, STDERR_FILENO);
@@ -32,7 +32,7 @@ pid_t	exec_single(t_cmd *cmd, t_env **env, int id)
 		return (pid);
 	else
 	{
-		dup_redirec(cmd);
+		dup_redirect(cmd);
 		exec_cmd(cmd, env);
 	}
 	return (pid);
@@ -54,9 +54,9 @@ pid_t	exec_heredoc(t_cmd *cmd)
 	}
 	else
 	{
-		if (!cmd->in)
-			cmd->in = ft_strdup("");
-		pid = write(file[1], cmd->in, ft_strlen(cmd->in));
+		if (!cmd->in_heredoc)
+			cmd->in_heredoc = ft_strdup("TEST\n");
+		pid = write(file[1], cmd->in_heredoc, ft_strlen(cmd->in_heredoc));
 		close(file[0]);
 		close(file[1]);
 		exit(pid);
@@ -85,7 +85,7 @@ pid_t	exec_pipe(t_cmd *cmd, t_env **env)
 		dup2(files[1], STDOUT_FILENO);
 		close(files[0]);
 		close(files[1]);
-		dup_redirec(cmd);
+		dup_redirect(cmd);
 		exec_cmd(cmd, env);
 	}
 	return (pid);
@@ -95,8 +95,6 @@ pid_t	exec_type(t_cmd *cmd, t_env **env, int id)
 {
 	int	pid;
 
-	if (cmd->heredoc)
-		pid = exec_heredoc(cmd);
 	if (!cmd->next)
 	{
 		dup2(g_vars.stdout, STDOUT_FILENO);

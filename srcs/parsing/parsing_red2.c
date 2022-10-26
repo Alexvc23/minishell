@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:47:25 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/22 18:18:05 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 15:07:48 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,57 +69,5 @@ int	check_redirections(char c)
 		ft_putstr_fd("'\n", 2);
 		return (1);
 	}
-	return (0);
-}
-
-int	redirect_output(t_cmd *cmd, int i)
-{
-	int	is_open;
-
-	is_open = 0;
-	if (cmd->rdir_types[i] == RIGHT_SGL_R)
-	{
-		is_open = open(cmd->files[i], O_WRONLY | O_TRUNC | O_CREAT, 0777);
-		cmd->out = cmd->files[i];
-		cmd->append = 0;
-	}
-	else if (cmd->rdir_types[i] == RIGHT_DBL_R)
-	{
-		is_open = open(cmd->files[i], O_WRONLY | O_APPEND | O_CREAT, 0777);
-		cmd->out = cmd->files[i];
-		cmd->append = 1;
-	}
-	if (is_open < 0)
-	{
-		ft_putstr_fd(cmd->files[i], 2);
-		ft_putstr_fd(" : Cannot access file or directory\n", 2);
-		return (1);
-	}
-	if (is_open != 0)
-		close(is_open);
-	return (0);
-}
-
-int	redirect_input(t_cmd *cmd, int i)
-{
-	int	is_open;
-
-	is_open = 0;
-	if (cmd->rdir_types[i] == LEFT_SGL_R)
-	{
-		is_open = open(cmd->files[i], O_RDONLY);
-		cmd->in = cmd->files[i];
-	}
-	else if (cmd->rdir_types[i] == LEFT_DBL_R)
-		wait_heredoc(cmd);
-	if (is_open < 0)
-	{
-		ft_putstr_fd("Minishell : ", 2);
-		ft_putstr_fd(cmd->files[i], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		return (1);
-	}
-	if (is_open != 0)
-		close(is_open);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:38:30 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/24 15:36:18 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 18:59:59 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ int	new_command(char *str, int start, int end)
 		return (error_parsing("Malloc Error\n", 2));
 	init_command(new_cmd);
 	cmd_str = ft_substr(str, start, end - start);
-	if (find_var(&cmd_str, g_vars.env)
+	if (redirections(&cmd_str, new_cmd)
+		|| find_var(&cmd_str, g_vars.env)
 		|| find_tild(&cmd_str, g_vars.env)
-		|| redirections(&cmd_str, new_cmd)
 		|| parse_command(&cmd_str, new_cmd)
 		|| arguments(&cmd_str, new_cmd))
 	{

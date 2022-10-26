@@ -6,25 +6,28 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/22 18:15:57 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 19:05:15 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	dup_redirec(t_cmd *cmd)
+void	dup_redirect(t_cmd *cmd)
 {
-	int	in;
-	int	out;
+	int		in;
+	int		out;
 
 	if (cmd->in && !cmd->heredoc)
 	{
+		printf("redirect_in\n");
 		in = open(cmd->in, O_RDONLY, 0777);
 		if (in < 0)
 			exit(1);
 		dup2(in, STDIN_FILENO);
 		close(in);
 	}
+	if (cmd->heredoc)
+		exec_heredoc(cmd);
 	if (cmd->out)
 	{
 		out = open(cmd->out, O_WRONLY | O_CREAT | (

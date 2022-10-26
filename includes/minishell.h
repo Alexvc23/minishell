@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/25 17:04:16 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 18:31:52 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@
 # define CENTER	"\033[60G"
 
 //redirections types
-# define LEFT_SGL_R 0
-# define RIGHT_SGL_R 1
-# define LEFT_DBL_R 2
-# define RIGHT_DBL_R 3
+# define LEFT_SGL_R 0	//redirect_input
+# define RIGHT_SGL_R 1	//redirect_output
+# define LEFT_DBL_R 2	//heredoc
+# define RIGHT_DBL_R 3	//append
 
 //builtin cd command
 # define CD_STD 1
@@ -74,6 +74,7 @@ typedef struct s_cmd
 	char			**files;
 	int				n_rdirs;
 	char			*in;
+	char			*in_heredoc;
 	char			*out;
 	int				heredoc;
 	int				append;
@@ -143,8 +144,6 @@ int		redirections(char **str, t_cmd *command);
 void	parse_rdir_type(char *str, int *i, t_cmd *command);
 int		parse_files(char *str, int *i, t_cmd *command);
 int		check_redirections(char c);
-int		redirect_output(t_cmd *cmd, int i);
-int		redirect_input(t_cmd *cmd, int i);
 
 //ARGUMENTS
 int		count_arguments(char *str);
@@ -185,8 +184,12 @@ void	free_commands(t_cmd **commands);
 void	free_envs(t_env **envs);
 int		error_parsing(char *err_str, int fd);
 
-//HEREDOC
-int		wait_heredoc(t_cmd *stru);
+//TEST REDIRECT + HEREDOC
+int		test_redirect(void);
+int		redirect_output(t_cmd *cmd, int i);
+int		redirect_input(t_cmd *cmd, int i);
+
+int		ft_heredoc(char **final_line, char *heredoc_str);
 
 ////////////////////////////////////////////////
 /////////////////////EXEC///////////////////////
@@ -204,7 +207,7 @@ int		ft_env_size(t_env *head);
 int		ft_cmd_size(t_cmd *cmd);
 
 //EXEC utils
-void	dup_redirec(t_cmd *cmd);
+void	dup_redirect(t_cmd *cmd);
 
 //EXEC BUILTIN
 int		ft_is_builtin(t_cmd *cmd);

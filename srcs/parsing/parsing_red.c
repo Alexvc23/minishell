@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:43:48 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/24 15:26:29 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 16:46:09 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,12 @@ int	new_redirection(char **str, int start, t_cmd *command)
 	if (parse_files(*str, &end, command))
 		return (1);
 	remove_char(str, start, end);
+	if (command->rdir_types[command->n_rdirs] != LEFT_DBL_R)
+		if (find_var(&(command->files[command->n_rdirs]), g_vars.env)
+			|| find_tild(&(command->files[command->n_rdirs]), g_vars.env))
+			return (1);
 	remove_quotes(&(command->files[command->n_rdirs]));
 	(command->n_rdirs)++;
-	if (redirect_output(command, command->n_rdirs - 1)
-		|| redirect_input(command, command->n_rdirs - 1))
-		return (1);
 	return (0);
 }
 
@@ -96,7 +97,7 @@ int	redirections(char **str, t_cmd *command)
 		if (!(command->rdir_types))
 			return (error_parsing("Malloc Error\n", 2));
 		command->files = malloc(
-				sizeof(char *) * count_redirections(*str));
+				sizeof(char *) * count_redirections(*str) + 1);
 		if (!(command->files))
 			return (error_parsing("Malloc Error\n", 2));
 		if (create_redirection(str, command))

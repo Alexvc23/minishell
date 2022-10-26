@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 19:48:31 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/25 19:58:40 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 19:13:34 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	ft_prompt(void)
 	ft_termios();
 	signal(SIGINT, handler_shell);
 	signal(SIGQUIT, handler_shell);
-	str = NULL;
 	str = readline(BOLD PINK "Minishell_> " END);
 	reset_termios();
 	if (!str)
@@ -29,7 +28,7 @@ int	ft_prompt(void)
 		rl_clear_history();
 		exit(g_vars.status);
 	}
-	if (create_commands(str) == 0)
+	if (create_commands(str) == 0 && test_redirect() == 0)
 	{
 		exec();
 	}
