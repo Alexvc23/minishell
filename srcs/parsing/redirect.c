@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/26 19:04:47 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 19:30:21 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ int	redirect_output(t_cmd *cmd, int i)
 	if (cmd->rdir_types[i] == RIGHT_SGL_R)
 	{
 		is_open = open(cmd->files[i], O_WRONLY | O_TRUNC | O_CREAT, 0777);
-		cmd->out = cmd->files[i];
+		cmd->out = ft_strdup(cmd->files[i]);
 		cmd->append = 0;
 	}
 	else if (cmd->rdir_types[i] == RIGHT_DBL_R)
 	{
 		is_open = open(cmd->files[i], O_WRONLY | O_APPEND | O_CREAT, 0777);
-		cmd->out = cmd->files[i];
+		cmd->out = ft_strdup(cmd->files[i]);
 		cmd->append = 1;
 	}
 	if (is_open < 0)
@@ -48,7 +48,8 @@ int	redirect_input(t_cmd *cmd, int i)
 	if (cmd->rdir_types[i] == LEFT_SGL_R)
 	{
 		is_open = open(cmd->files[i], O_RDONLY);
-		cmd->in = cmd->files[i];
+		cmd->in = ft_strdup(cmd->files[i]);
+		cmd->heredoc = 0;
 	}
 	else if (cmd->rdir_types[i] == LEFT_DBL_R)
 		cmd->heredoc = 1;

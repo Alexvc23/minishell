@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:32:46 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/26 19:12:21 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/26 19:31:30 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ void	free_commands(t_cmd **commands)
 			free((*commands)->rdir_types);
 			free_tab((*commands)->files, (*commands)->n_rdirs);
 		}
+		if ((*commands)->in)
+			free((*commands)->in);
+		if ((*commands)->in_heredoc)
+			free((*commands)->in_heredoc);
+		if ((*commands)->out)
+			free((*commands)->out);
 		free(*commands);
 		*commands = temp;
 	}
