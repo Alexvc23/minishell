@@ -1,12 +1,23 @@
 
-SRC_DIR	= 	srcs/
-OBJ_DIR	= 	objs/
-INCLDS	=	includes/
+RESET	= 	\033[0;0m
+ERASE	=	\033[2K\r
+GREY	=	\033[30m
+RED		=	\033[31m
+GREEN	=	\033[32m
+YELLOW	=	\033[33m
+BLUE	=	\033[34m
+PINK	=	\033[35m
+CYAN	=	\033[36m
+WHITE	=	\033[37m
+BOLD	=	\033[1m
+UNDER	=	\033[4m
+SUR		=	\033[7m
+END		=	\033[0m
+CENTER	=	\033[60G
 
-SUBDIRS =	$(addprefix $(OBJ_DIR),$(shell find srcs/ -type d | cut -c 6-))
-C_FILES =	$(shell find srcs/ -iname *.c | cut -c 6-)
-SRCS	=	$(addprefix $(SRC_DIR),$(C_FILES))
-OBJS    =	$(addprefix $(OBJ_DIR),$(C_FILES:.c=.o))
+INCLDS	=	includes
+SRCS	=	$(shell find srcs -iname *.c)
+OBJS    =	$(SRCS:.c=.o)
 
 FLAGS	=	-Wall -Wextra -Werror
 RLINE	=	-lreadline
@@ -15,35 +26,35 @@ RDFLAGS	=	-I /Users/$(USER)/Desktop/homebrew/opt/readline/include
 
 NAME	= minishell
 
-LIBDIR	= ./libft
+LIBDIR	= libft
 LIBFT	= $(LIBDIR)/libft.a
 
 all : libft $(NAME)
+
+$(LIBFT) :
+	libft
 
 libft :
 	make -C $(LIBDIR) all
 
 $(NAME) : $(OBJS)
-	gcc $(FLAGS) $(LIBFT) $(RLINE) $(RDFLAGS) $(RLFLAGS) $(OBJS) -o $(NAME)
+	@gcc $(FLAGS) $(LIBFT) $(RLINE) $(RDFLAGS) $(RLFLAGS) $(OBJS) -o $(NAME)
+	@printf "$(BOLD)$(RED)Creating Executable ----> $(RESET)$(BOLD)$(CYAN) $@ $(END)\n"
 
 clean :
-	make -C $(LIBDIR) fclean
-	rm -f $(OBJS)
+	@make -C $(LIBDIR) clean
+	@rm -f $(OBJS)
+	@printf "$(BOLD)$(RED)(MINISHELL)	---->	$(RESET)$(BOLD)$(WHITE)Cleaning$(END)\n"
 
-fclean : clean
-	rm -f $(NAME)
+fclean :
+	@make -C $(LIBDIR) fclean
+	@rm -f $(OBJS) $(NAME)
+	@printf "$(BOLD)$(RED)(MINISHELL)	---->	$(RESET)$(BOLD)$(WHITE)Full Cleaning$(END)\n"
 
 re : fclean all
 
-$(OBJ_DIR)%.o : $(SRC_DIR)%.c $(LIBFT)
-	mkdir -p $(OBJ_DIR) $(SUBDIRS)
-	gcc -I $(INCLDS) $(FLAGS) $(RDFLAGS) -c $< -o $@
-
-# rule to debug Makefile
-print:
-	$(info OBJS = $(OBJ))
-	$(info only files= $(C_FILES))
-	$(info files with path = $(SRCS))
-	$(info subdirectories = $(SUBDIRS))
+%.o : %.c	$(LIBFT)
+	@gcc $(FLAGS) $(RDFLAGS) -I $(INCLDS) -c $< -o $@
+	@printf "$(CYAN)Creating ----> $(RESET)$(BOLD)$(WHITE) $@ $(END)\n"
 
 .PHONY: clean fclean re all libft

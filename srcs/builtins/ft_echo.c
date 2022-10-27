@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 14:18:29 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/22 18:16:18 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/28 00:00:27 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,17 @@ int	ft_echo(t_cmd *cmd)
 	int	option_n;
 
 	option_n = 0;
-	if (cmd->n_args >= 2 && ft_strncmp(cmd->args[1], "-n", 3) == 0)
+	if (cmd->n_args >= 2 && ft_strncmp(cmd->args[1], "-n", 2) == 0)
 		option_n = 1;
 	i = 1;
+	while (cmd->args[1][++i])
+	{
+		if (cmd->args[1][i] != 'n')
+			option_n = 0;
+	}
+	i = 1;
+	if (option_n)
+		i = 2;
 	while (i < cmd->n_args)
 	{
 		printf("%s", cmd->args[i]);

@@ -1,3 +1,19 @@
+RESET	= 	\033[0;0m
+ERASE	=	\033[2K\r
+GREY	=	\033[30m
+RED		=	\033[31m
+GREEN	=	\033[32m
+YELLOW	=	\033[33m
+BLUE	=	\033[34m
+PINK	=	\033[35m
+CYAN	=	\033[36m
+WHITE	=	\033[37m
+BOLD	=	\033[1m
+UNDER	=	\033[4m
+SUR		=	\033[7m
+END		=	\033[0m
+CENTER	=	\033[60G
+
 SOURCES	=	./ft_isalpha.c ./ft_isdigit.c ./ft_isalnum.c ./ft_isascii.c 	\
 			./ft_isprint.c ./ft_strlen.c ./ft_memset.c ./ft_bzero.c			\
 			./ft_memcpy.c ./ft_memmove.c ./ft_strlcpy.c ./ft_strlcat.c		\
@@ -19,19 +35,24 @@ NAME	=	libft.a
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-	ar rcs $(NAME) $(OBJECTS)
+	@ar rcs $(NAME) $(OBJECTS)
+	@printf "$(BOLD)$(RED)Creating Library ----> $(BOLD)$(CYAN) $@ $(END)\n"
+
 
 clean:
-	rm -f $(OBJECTS)
+	@rm -f $(OBJECTS)
+	@printf "$(BOLD)$(RED)(LIBFT)		---->	$(RESET)$(BOLD)$(WHITE)Cleaning$(END)\n"
 
-fclean: clean
-	rm -f $(NAME)
+fclean:
+	@rm -f $(OBJECTS) $(NAME)
+	@printf "$(BOLD)$(RED)(LIBFT)		---->	$(RESET)$(BOLD)$(WHITE)Full Cleaning$(END)\n"
 
 re:
 	make fclean
 	make all
 
 %.o: %.c	libft.h
-	gcc $(FLAGS) -c $< -o $@
+	@gcc $(FLAGS) -c $< -o $@
+	@printf "$(CYAN)Creating ----> $(RESET)$(BOLD)$(WHITE) $@ $(END)\n"
 
 .PHONY: clean fclean re all

@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/25 17:33:04 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 20:51:11 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ static int	ft_chdir(char *path)
 static int	ft_go_to(t_env **env, char *path, int cd_type)
 {
 	int		err_type;
-	char	*oldpwd;
+	char	*pwd;
 
-	oldpwd = ft_strdup(ft_get_node_value(env, "PWD"));
+	pwd = ft_strdup(ft_get_node_value(env, "PWD"));
 	if (cd_type == CD_HOME)
 	{
 		if (!path)
@@ -73,11 +73,12 @@ static int	ft_go_to(t_env **env, char *path, int cd_type)
 		if (!path)
 			return (ft_error(" not set", "OLDPWD", 1));
 	}
-	update_env(env, ft_strdup("OLDPWD"), oldpwd);
+	update_env(env, ft_strdup("OLDPWD"), pwd);
 	err_type = ft_chdir(path);
-	update_env(env, ft_strdup("PWD"), getcwd(NULL, 0));
+	pwd = getcwd(NULL, 0);
 	if (cd_type == CD_OLD && !err_type)
-		printf("%s\n", getcwd(NULL, 0));
+		printf("%s\n", pwd);
+	update_env(env, ft_strdup("PWD"), pwd);
 	return (err_type);
 }
 
@@ -103,19 +104,18 @@ int	ft_cd(t_cmd *cmd, t_env **env)
 		|| (cmd->n_args >= 2 && !ft_strncmp(cmd->args[1], "~", 2))
 		|| (cmd->n_args >= 2 && !ft_strncmp(cmd->args[1], "--", 3)))
 	{
-		path = ft_strdup(ft_get_node_value(env, "HOME"));
+		path = ft_get_node_value(env, "HOME");
 		cd_type = CD_HOME;
 	}
 	else if (cmd->n_args >= 2 && !ft_strncmp(cmd->args[1], "-", 2))
 	{
-		path = ft_strdup(ft_get_node_value(env, "OLDPWD"));
+		path = ft_get_node_value(env, "OLDPWD");
 		cd_type = CD_OLD;
 	}
 	else if (cmd->n_args >= 2 && !ft_strncmp(cmd->args[1], "/", 1))
-		path = ft_strdup(cmd->args[1]);
+		path = cmd->args[1];
 	else
-		path = ft_strdup(cmd->args[1]);
+		path = cmd->args[1];
 	err_type = ft_go_to(env, path, cd_type);
-	free(path);
 	return (err_type);
 }

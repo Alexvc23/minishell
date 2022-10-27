@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/27 19:52:04 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 21:40:03 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ int	wait_heredoc(t_cmd *cmd, char *heredoc_str)
 		kill(g_vars.h_pid, SIGTERM);
 	g_vars.h_pid = 0;
 	close(pipefd[1]);
-	if (WIFSIGNALED(status))
-		return (1);
 	cmd->in_heredoc = read_fd(pipefd[0]);
 	close(pipefd[0]);
+	if (WIFSIGNALED(status))
+		return (1);
 	return (0);
 }
 
