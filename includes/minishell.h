@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/27 18:03:15 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 18:43:53 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,18 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-	//*com;			->	commande string
-	//**args;		->	arguments string list
-	//n_args;		->	nombre de d'arguments
-	//n_rdirs;		->	nombre de redirections
-	//*rdir_types;	->	redirections types list
-	//**files;		->	redirections string list
-	//*in;			->	string in
-	//*out;			->	string out
+	//*com			->	commande string
+	//**args		->	arguments string list
+	//n_args		->	nombre de d'arguments
+	//n_rdirs		->	nombre de redirections
+	//*rdir_types	->	redirections types list
+	//**files		->	redirections string list
+	//*in			->	string in
+	//*in_heredoc	->	string in_heredoc
+	//*out			->	string out
+	//heredoc		->	= 1 si le dernier input redirection est un heredoc
+	//append		->	= 1 si le dernier output redirection est un append
+	//*next			->	next pointer cmd
 
 typedef struct s_shell {
 	int				stdin;
@@ -101,7 +105,6 @@ typedef struct s_shell {
 	int				*pids;
 	pid_t			h_pid;
 	struct termios	term_save;
-	struct termios	term_new;
 }	t_shell;
 
 	//stdin		->	
@@ -112,6 +115,7 @@ typedef struct s_shell {
 	//*cmd		->	commandes
 	//n_cmd		->	nombre de commandes
 	//*pids		->	pid des processus (enfants/parent)
+	//h_pid		->	pid des processus quand HEREDOC>
 
 t_shell	g_vars;
 
@@ -189,10 +193,10 @@ int		test_redirect(void);
 int		redirect_output(t_cmd *cmd, int i);
 int		redirect_input(t_cmd *cmd, int i);
 
+char	*read_fd(int fd);
 int		ft_heredoc(char **final_line, char *heredoc_str);
 int		wait_heredoc(t_cmd *cmd, char *heredoc_str);
 int		make_in_heredoc(t_cmd *cmd);
-//int		wait_heredoc(t_cmd *cmd);
 
 ////////////////////////////////////////////////
 /////////////////////EXEC///////////////////////
@@ -245,7 +249,6 @@ int		ft_cd(t_cmd *cmd, t_env **env);
 ////////////////////SIGNALS/////////////////////
 ////////////////////////////////////////////////
 
-//void	handler_heredoc(int sig);
 void	handler_shell(int sig);
 
 ////////////////////////////////////////////////
