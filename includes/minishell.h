@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:29:42 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/26 18:31:52 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 18:03:15 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,9 @@ int		redirect_output(t_cmd *cmd, int i);
 int		redirect_input(t_cmd *cmd, int i);
 
 int		ft_heredoc(char **final_line, char *heredoc_str);
+int		wait_heredoc(t_cmd *cmd, char *heredoc_str);
+int		make_in_heredoc(t_cmd *cmd);
+//int		wait_heredoc(t_cmd *cmd);
 
 ////////////////////////////////////////////////
 /////////////////////EXEC///////////////////////
@@ -206,9 +209,6 @@ void	free_arr(void **arr);
 int		ft_env_size(t_env *head);
 int		ft_cmd_size(t_cmd *cmd);
 
-//EXEC utils
-void	dup_redirect(t_cmd *cmd);
-
 //EXEC BUILTIN
 int		ft_is_builtin(t_cmd *cmd);
 int		exec_builtin(t_cmd *cmd, t_env **env);
@@ -219,8 +219,9 @@ char	*ft_get_cmd(char *v_path, char *cmd);
 void	exec_cmd(t_cmd *cmd, t_env **env);
 
 //EXEC TYPE
+void	exec_heredoc(t_cmd *cmd);
+void	exec_redirect(t_cmd *cmd);
 pid_t	exec_single(t_cmd *cmd, t_env **env, int id);
-pid_t	exec_heredoc(t_cmd *cmd);
 pid_t	exec_pipe(t_cmd *cmd, t_env **env);
 pid_t	exec_type(t_cmd *cmd, t_env **env, int id);
 
@@ -244,7 +245,7 @@ int		ft_cd(t_cmd *cmd, t_env **env);
 ////////////////////SIGNALS/////////////////////
 ////////////////////////////////////////////////
 
-void	handler_heredoc(int sig);
+//void	handler_heredoc(int sig);
 void	handler_shell(int sig);
 
 ////////////////////////////////////////////////

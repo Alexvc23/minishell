@@ -6,86 +6,103 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/26 19:04:24 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 18:30:53 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char	*read_fd(int fd)
+{
+	char	*final_str;
+	char	*tmp;
+	char	*str;
+
+	final_str = NULL;
+	str = get_next_line(fd);
+	while (str)
+	{
+		if (!final_str)
+			final_str = ft_strdup("");
+		tmp = ft_strjoin(final_str, str);
+		free(final_str);
+		final_str = ft_strdup(tmp);
+		free(tmp);
+		free(str);
+		str = get_next_line(fd);
+	}
+	return (final_str);
+}
+
 int	ft_heredoc(char **final_line, char *heredoc_str)
 {
-	int		delimiter_found;
 	char	*line;
 	char	*temp;
 
-	if (*final_line)
-		free(*final_line);
-	delimiter_found = 1;
 	*final_line = ft_strdup("");
-	while (delimiter_found)
+	while (1)
 	{
+		ft_termios();
 		line = readline(RED "HEREDOC> " END);
-		if (!line)
+		reset_termios();
+		if (!line && !ft_strncmp(line, heredoc_str, ft_strlen(line) + 1))
 			break ;
-		delimiter_found = ft_strncmp(line, heredoc_str,
-				ft_strlen(line) + 1);
-		if (delimiter_found)
-		{
-			temp = ft_strjoin(*final_line, line);
-			free(*final_line);
-			*final_line = ft_strjoin(temp, "\n");
-			free(temp);
-		}
-		free(line);
+		temp = ft_strjoin(*final_line, line);
+		free(*final_line);
+		*final_line = ft_strjoin(temp, "\n");
+		free(temp);
 	}
-	if (find_var(final_line, g_vars.env))
-		return (1);
+	if (line)
+		free(line);
 	return (0);
 }
 
-/*pid_t	ft_heredoc_fork(char *heredoc_str)
-{
-	pid_t	pid;
-	int		files[2];
-	char	*final_line;
-
-	dup2(g_vars.stdin, STDIN_FILENO);
-	if (pipe(files) < 0)
-		return (-1);
-	pid = fork();
-	if (pid < 0)
-		return (-1);
-	if (pid)
-	{
-		dup2(files[0], STDIN_FILENO);
-		close(files[0]);
-		close(files[1]);
-		return (pid);
-	}
-	final_line = ft_heredoc(heredoc_str, NULL);
-	write(files[1], final_line, ft_strlen(final_line));
-	free(final_line);
-	return (pid);
-}
-
-int	wait_heredoc(char *heredoc_str)
+int	wait_heredoc(t_cmd *cmd, char *heredoc_str)
 {
 	int	status;
+	int	pipefd[2];
 
-	signal(SIGINT, handler_heredoc);
-	g_vars.h_pid = ft_heredoc_fork(heredoc_str);
-	if (g_vars.h_pid == 0)
-		exit(0);
-	waitpid(g_vars.h_pid, &status, 0);
-	if (WIFEXITED(status))
+	if (pipe(pipefd) == -1)
+		return (1);
+	g_vars.h_pid = fork();
+	if (g_vars.h_pid == -1)
+		return (1);
+	else if (g_vars.h_pid == 0)
 	{
-		g_vars.status = WEXITSTATUS(status);
-		return (status);
+		close(pipefd[0]);
+		ft_heredoc(&(cmd->in_heredoc), heredoc_str);
+		write(pipefd[1], cmd->in_heredoc, ft_strlen(cmd->in_heredoc));
+		close(pipefd[1]);
+		exit(EXIT_SUCCESS);
 	}
-	else if (WIFSIGNALED(status))
+	if (wait(&status) < 0)
+		kill(g_vars.h_pid, SIGTERM);
+	g_vars.h_pid = 0;
+	close(pipefd[1]);
+	if (WIFSIGNALED(status))
+		return (1);
+	cmd->in_heredoc = read_fd(pipefd[0]);
+	close(pipefd[0]);
+	return (0);
+}
+
+int	make_in_heredoc(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd->n_rdirs)
 	{
-		g_vars.status = 2;
-		return (7);
+		if (cmd->rdir_types[i] == LEFT_DBL_R)
+		{
+			if (cmd->in_heredoc)
+				free(cmd->in_heredoc);
+			if (wait_heredoc(cmd, cmd->files[i]))
+				return (1);
+		}
+		if (find_var(&(cmd->in_heredoc), g_vars.env))
+			return (1);
+		i++;
 	}
 	return (0);
-}*/
+}

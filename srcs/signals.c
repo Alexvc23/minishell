@@ -6,30 +6,29 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 17:10:08 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/24 16:44:23 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 17:46:19 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handler_heredoc(int sig)
+static void	handler_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		if (g_vars.h_pid)
-			kill(g_vars.h_pid, 15);
+		kill(g_vars.h_pid, SIGTERM);
+		g_vars.status = 1;
 		write(1, "\n", 1);
 	}
 }
 
-void	handler_shell(int sig)
+static void	handler_standard(int sig)
 {
 	if (g_vars.n_cmd > 0)
 		return ;
 	if (sig == SIGINT)
 	{
 		g_vars.status = 1;
-		rl_redisplay();
 		rl_replace_line("", 0);
 		write(1, "\n", 1);
 		rl_on_new_line();
@@ -40,4 +39,12 @@ void	handler_shell(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 	}
+}
+
+void	handler_shell(int sig)
+{
+	if (g_vars.h_pid == 0)
+		handler_standard(sig);
+	else
+		handler_heredoc(sig);
 }

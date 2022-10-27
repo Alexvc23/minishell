@@ -6,17 +6,17 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/26 20:24:14 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 17:25:42 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	redirect_error(char *str)
+static int	redirect_error(char *cmd_str, char *err_str)
 {
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd(" : Permission denied\n", 2);
+	ft_putstr_fd(cmd_str, 2);
+	ft_putstr_fd(err_str, 2);
 	return (1);
 }
 
@@ -42,7 +42,7 @@ int	redirect_output(t_cmd *cmd, int i)
 		cmd->append = 1;
 	}
 	if (is_open < 0)
-		return (redirect_error(cmd->files[i]));
+		return (redirect_error(cmd->files[i], ": Permission denied\n"));
 	if (is_open != 0)
 		close(is_open);
 	return (0);
@@ -64,7 +64,7 @@ int	redirect_input(t_cmd *cmd, int i)
 	else if (cmd->rdir_types[i] == LEFT_DBL_R)
 		cmd->heredoc = 1;
 	if (is_open < 0)
-		return (redirect_error(cmd->files[i]));
+		return (redirect_error(cmd->files[i], ": No such file or directory\n"));
 	if (is_open != 0)
 		close(is_open);
 	return (0);
@@ -78,14 +78,8 @@ int	test_redirect(void)
 	cmd = g_vars.cmd;
 	while (cmd)
 	{
-		i = 0;
-		while (i < cmd->n_rdirs)
-		{
-			if (cmd->rdir_types[i] == LEFT_DBL_R)
-				if (ft_heredoc(&(cmd->in_heredoc), cmd->files[i]))
-					return (1);
-			i++;
-		}
+		if (make_in_heredoc(cmd))
+			return (1);
 		i = 0;
 		while (i < cmd->n_rdirs)
 		{
