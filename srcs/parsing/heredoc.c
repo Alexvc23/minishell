@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/27 18:30:53 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 19:52:04 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	ft_heredoc(char **final_line, char *heredoc_str)
 		ft_termios();
 		line = readline(RED "HEREDOC> " END);
 		reset_termios();
-		if (!line && !ft_strncmp(line, heredoc_str, ft_strlen(line) + 1))
+		if (!line || !ft_strncmp(line, heredoc_str, ft_strlen(line) + 1))
 			break ;
 		temp = ft_strjoin(*final_line, line);
 		free(*final_line);
@@ -99,9 +99,10 @@ int	make_in_heredoc(t_cmd *cmd)
 				free(cmd->in_heredoc);
 			if (wait_heredoc(cmd, cmd->files[i]))
 				return (1);
+			if (cmd->in_heredoc)
+				if (find_var(&(cmd->in_heredoc), g_vars.env))
+					return (1);
 		}
-		if (find_var(&(cmd->in_heredoc), g_vars.env))
-			return (1);
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/27 17:25:42 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/27 19:40:49 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	test_redirect(void)
 	int		i;
 	t_cmd	*cmd;
 
+	print_com(g_vars.cmd);
 	cmd = g_vars.cmd;
 	while (cmd)
 	{
