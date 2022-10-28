@@ -15,9 +15,11 @@ SUR		=	\033[7m
 END		=	\033[0m
 CENTER	=	\033[60G
 
+LEAKFLAGS	=	-fsanitize=address
+
 INCLDS	=	includes
 SRCS	=	$(shell find srcs -iname *.c)
-OBJS    =	$(SRCS:.c=.o)
+OBJS	=	$(SRCS:.c=.o)
 
 FLAGS	=	-Wall -Wextra -Werror
 RLINE	=	-lreadline
@@ -44,12 +46,12 @@ $(NAME) : $(OBJS)
 clean :
 	@make -C $(LIBDIR) clean
 	@rm -f $(OBJS)
-	@printf "$(BOLD)$(RED)(MINISHELL)	---->	$(RESET)$(BOLD)$(WHITE)Cleaning$(END)\n"
+	@printf "$(BOLD)$(RED)(MINISHELL)	---->	$(RESET)$(BOLD)$(WHITE)Clear$(END)\n"
 
 fclean :
 	@make -C $(LIBDIR) fclean
 	@rm -f $(OBJS) $(NAME)
-	@printf "$(BOLD)$(RED)(MINISHELL)	---->	$(RESET)$(BOLD)$(WHITE)Full Cleaning$(END)\n"
+	@printf "$(BOLD)$(RED)(MINISHELL)	---->	$(RESET)$(BOLD)$(WHITE)Full Clear$(END)\n"
 
 re : fclean all
 

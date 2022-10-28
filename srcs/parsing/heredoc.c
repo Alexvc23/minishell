@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 12:38:25 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/27 21:40:03 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/28 02:30:17 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_heredoc(char **final_line, char *heredoc_str)
 	while (1)
 	{
 		ft_termios();
-		line = readline(RED "HEREDOC> " END);
+		line = readline("> ");
 		reset_termios();
 		if (!line || !ft_strncmp(line, heredoc_str, ft_strlen(line) + 1))
 			break ;

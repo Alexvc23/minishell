@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:18:34 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/27 18:09:58 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/28 03:26:25 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,13 @@ pid_t	exec_single(t_cmd *cmd, t_env **env, int id)
 	if (pid < 0)
 		return (-1);
 	if (pid)
-		return (pid);
-	else
 	{
-		exec_redirect(cmd);
-		exec_cmd(cmd, env);
+		signal(SIGINT, handler_cmd);
+		signal(SIGQUIT, handler_cmd);
+		return (pid);
 	}
+	exec_redirect(cmd);
+	exec_cmd(cmd, env);
 	return (pid);
 }
 
@@ -94,15 +95,13 @@ pid_t	exec_pipe(t_cmd *cmd, t_env **env)
 		dup2(files[0], STDIN_FILENO);
 		close(files[0]);
 		close(files[1]);
+		return (pid);
 	}
-	else
-	{
-		dup2(files[1], STDOUT_FILENO);
-		close(files[0]);
-		close(files[1]);
-		exec_redirect(cmd);
-		exec_cmd(cmd, env);
-	}
+	dup2(files[1], STDOUT_FILENO);
+	close(files[0]);
+	close(files[1]);
+	exec_redirect(cmd);
+	exec_cmd(cmd, env);
 	return (pid);
 }
 

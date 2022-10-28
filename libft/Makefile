@@ -41,11 +41,11 @@ $(NAME): $(OBJECTS)
 
 clean:
 	@rm -f $(OBJECTS)
-	@printf "$(BOLD)$(RED)(LIBFT)		---->	$(RESET)$(BOLD)$(WHITE)Cleaning$(END)\n"
+	@printf "$(BOLD)$(RED)(LIBFT)		---->	$(RESET)$(BOLD)$(WHITE)Clear$(END)\n"
 
 fclean:
 	@rm -f $(OBJECTS) $(NAME)
-	@printf "$(BOLD)$(RED)(LIBFT)		---->	$(RESET)$(BOLD)$(WHITE)Full Cleaning$(END)\n"
+	@printf "$(BOLD)$(RED)(LIBFT)		---->	$(RESET)$(BOLD)$(WHITE)Full Clear$(END)\n"
 
 re:
 	make fclean
