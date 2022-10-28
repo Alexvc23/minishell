@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 06:45:43 by abouchet          #+#    #+#             */
-/*   Updated: 2022/10/27 19:36:04 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/28 04:16:46 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int	check_var(char **str, int *i, t_env *env)
 		}
 		while ((*str)[*i] && (ft_isalnum((*str)[*i]) || (*str)[*i] == '_'))
 			(*i)++;
-		replace_var(str, start, *i - 1, env);
+		if (start != *i - 1)
+			replace_var(str, start, *i - 1, env);
 		*i = start;
 	}
 	return (0);

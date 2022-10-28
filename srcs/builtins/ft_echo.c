@@ -6,7 +6,7 @@
 /*   By: abouchet <abouchet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 14:18:29 by jvalenci          #+#    #+#             */
-/*   Updated: 2022/10/28 00:00:27 by abouchet         ###   ########lyon.fr   */
+/*   Updated: 2022/10/28 04:10:28 by abouchet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,39 @@
    won't accept the option -n if it is followed by anything different from 'n'
 example: "-nnnnp" "-nnnnz" "-nnn " this will be printed as normal output */
 
+static int	ft_option_n(t_cmd *cmd)
+{
+	int	i;
+	int	j;
+	int	option_n;
+
+	option_n = 0;
+	i = 1;
+	while (cmd->args[i])
+	{
+		if (ft_strncmp(cmd->args[i], "-n", 2) == 0)
+		{
+			j = 1;
+			while (cmd->args[i][j] == 'n')
+				j++;
+			if (cmd->args[i][j] != 0)
+				break ;
+			option_n++;
+		}
+		else
+			break ;
+		i++;
+	}
+	return (option_n);
+}
+
 int	ft_echo(t_cmd *cmd)
 {
 	int	i;
 	int	option_n;
 
-	option_n = 0;
-	if (cmd->n_args >= 2 && ft_strncmp(cmd->args[1], "-n", 2) == 0)
-		option_n = 1;
-	i = 1;
-	while (cmd->args[1][++i])
-	{
-		if (cmd->args[1][i] != 'n')
-			option_n = 0;
-	}
-	i = 1;
-	if (option_n)
-		i = 2;
+	option_n = ft_option_n(cmd);
+	i = option_n + 1;
 	while (i < cmd->n_args)
 	{
 		printf("%s", cmd->args[i]);
